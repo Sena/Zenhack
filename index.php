@@ -1,9 +1,9 @@
 <?php
 require 'source/Zenhack.php';
 //set your zendesk's subdomain in construction parameter
-$var = new \zh\Zenhack('groupon');
-$var = new \zh\Zenhack('itau');
+//$var = new \zh\Zenhack('itau');
 //$var = new \zh\Zenhack('pagsegurodev');
+$var = new \zh\Zenhack('groupon');
 
 //you may set the user that should write the last comments
 $var->filter_author('6018277318');//Ocamoto
