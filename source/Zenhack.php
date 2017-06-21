@@ -118,6 +118,9 @@ class Zenhack
             $posts = $this->curl($post_url);
 
             foreach ($posts->posts as $post_key => $post_row) {
+                if($this->stop_seek !== false) {
+                    break;
+                }
 
                 $post_row->comments = array();
 
@@ -126,7 +129,8 @@ class Zenhack
                 } else {
                     $post_row->comments = $this->find_comments($post_row->id, $post_row->comment_count);
 
-                    if (count($post_row->comments) > 0 || true) {
+                    if (count($post_row->comments) > 0) {
+                        $this->log('$post_row->id: ' . $post_row->id);
                         if ($this->check_author($post_row->comments, $this->author_list) === false) {
                             $this->set_post_unread($post_row);
                         } else {
@@ -175,21 +179,23 @@ class Zenhack
     {
         $file_data = null;
 
-        if (isset($_SESSION[$post_id][$comment_count])) {
-            $this->log('Reading: $_SESSION[' . $post_id . '][$comment_count]');
-            $file_data = $_SESSION[$post_id][$comment_count];
-        } elseif (isset($_SESSION[$post_id])) {
-            $this->log('Cleaning: $_SESSION[' . $post_id . ']');
-            unset($_SESSION[$post_id]);
+        if (isset($_SESSION['post' . $post_id]['cc' . $comment_count])) {
+            $this->log('Reading: $_SESSION[post' . $post_id . '][cc' . $comment_count . ']');
+            $file_data = $_SESSION['post' . $post_id]['cc' . $comment_count];
+        } elseif (isset($_SESSION['post' . $post_id])) {
+            $this->log('Cleaning: $_SESSION[post' . $post_id . ']');
+            unset($_SESSION['post' . $post_id]);
         }
 
-        if($file_data !== null) {
+        if($file_data === null) {
             $data = $this->curl('https://' . $this->subdomain . '.zendesk.com/api/v2/help_center/community/posts/' . $post_id . '/comments.json');
             if (isset($data->comments)) {
-                $_SESSION[$post_id][$comment_count] = $data;
+                $_SESSION['post' . $post_id]['cc' . $comment_count] = $data;
+            }else{
+                $this->log('not put' . $post_id);
             }
         }
-        return isset($data->comments) ? $data->comments : array();
+        return isset($_SESSION['post' . $post_id]['cc' . $comment_count]->comments) ? $_SESSION['post' . $post_id]['cc' . $comment_count]->comments : array();
     }
 
     /**
@@ -199,9 +205,12 @@ class Zenhack
     private function check_author(Array $data)
     {
         if (count($data) === 0) {
+            $this->log('empty data: ');
             return false;
         }
         $data = current($data);
+
+        $this->log('$data->author_id: ' . $data->author_id);
 
         return in_array($data->author_id, $this->author_list);
     }
@@ -221,8 +230,6 @@ class Zenhack
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, Array('Content-Type: application/xml; charset=ISO-8859-2'));
-        curl_setopt($curl, CURLOPT_HTTPHEADER, Array('Accept: application/xml; charset=ISO-8859-2'));
         $data = curl_exec($curl);
         curl_close($curl);
 
