@@ -112,7 +112,8 @@ class Zenhack
      */
     private function make_call()
     {
-        $post_url = 'https://' . $this->subdomain . '.zendesk.com/api/v2/community/posts.json?per_page=100';
+        $param = 'per_page=100&sort_by=recent_activity';
+        $post_url = 'https://' . $this->subdomain . '.zendesk.com/api/v2/community/posts.json?' . $param;
 
         while (strlen($post_url) > 30 && $this->stop_seek === false) {
             $posts = $this->curl($post_url);
@@ -140,7 +141,7 @@ class Zenhack
                 }
             }
 
-            $post_url = $posts->next_page . '&per_page=100';
+            $post_url = $posts->next_page . '&' . $param;
         }
     }
 
