@@ -14,11 +14,17 @@ $var->log_active();
 //you may set the user that should write the last comments
 $var->filter_author('6018311238');
 $var->filter_author('13468838768');
-$var->filter_author('6018277318');
-$var->filter_author('5989545817');
-$var->filter_author('5979349268');
-$var->filter_author('114222767674');
+$var->filter_author('6018277318');      // Rafael
+$var->filter_author('5989545817');      // Patricia
+$var->filter_author('5979349268');      // Marcelo
+$var->filter_author('114222767674');    // Flávio
 $var->filter_author('114314801294');
+$var->filter_author('115633083454');    // Felipe
+$var->filter_author('364288446654');    // Natalia
+$var->filter_author('364746378953');    // Rodrigo 
+$var->filter_author('364250871353');    // Julian 
+$var->filter_author('114515096233 ');   // Adalto
+$var->filter_author('363353383573');    // Eduardo 
 
 
 //an your request should be like it.
