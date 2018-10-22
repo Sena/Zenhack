@@ -23,7 +23,7 @@ $var->filter_author('115633083454');    // Felipe
 $var->filter_author('364288446654');    // Natalia
 $var->filter_author('364746378953');    // Rodrigo 
 $var->filter_author('364250871353');    // Julian 
-$var->filter_author('114515096233 ');   // Adalto
+$var->filter_author('114515096233');   // Adalto
 $var->filter_author('363353383573');    // Eduardo 
 
 
