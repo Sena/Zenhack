@@ -10,6 +10,8 @@ require 'source/Zenhack.php';
 $var = new \zh\Zenhack('pagsegurodev');
 //$var = new \zh\Zenhack('groupon');
 
+$var->set_datetime_limit(date('Y-m-d H:i:s', strtotime("-7 days")));
+
 $var->log_active();
 //you may set the user that should write the last comments
 $var->filter_author('6018311238');
