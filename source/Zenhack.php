@@ -14,6 +14,8 @@ class Zenhack
     private $author_list = array();
 
     private $subdomain = null;
+    private $datetime_limit = null;
+    
 
     /**
      * @var array
@@ -76,6 +78,16 @@ class Zenhack
      * @param bool|int $limit
      * @return array
      */
+    public function set_datetime_limit($datetime)
+    {
+        $this->datetime_limit = $datetime;
+    }
+
+    /**
+     * @param array $filter
+     * @param bool|int $limit
+     * @return array
+     */
     public function get_post_read(Array $filter = array(), $limit = false)
     {
         $this->post_read_limit = $limit;
@@ -95,6 +107,12 @@ class Zenhack
     {
         if (count($filter) > 0) {
             foreach ($array as $array_key => $array_row) {
+                if($this->datetime_limit !== null && $this->datetime_limit > $array_row->updated_at) {
+
+                    unset($array[$array_key]);                    
+                    $this->log('Removed post: ' . var_export($array_row, true));
+                    continue;
+                }
                 foreach ($array_row as $key => $row) {
                     if (!in_array($key, $filter)) {
                         unset($array_row->$key);
