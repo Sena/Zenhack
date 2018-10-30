@@ -6,6 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="assets/css/main.css">
+    <base href="<?=base_url();?>">
     <title>Zenhack - list</title>
 </head>
 <body>
@@ -20,7 +21,7 @@ Total: <?=count($post_unread);?>
     <?php foreach ($post_unread as $row):?>
         <tr title="<?=strip_tags($row->details);?>" alt="<?=strip_tags($row->details);?>">
             <td>
-                <a href="<?=$row->html_url;?>" target="_blank">
+                <a href="./redirect/<?=$row->hash;?>" target="_blank">
                     <?=$row->title;?>
                 </a>
             </td>
