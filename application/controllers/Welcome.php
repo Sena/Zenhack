@@ -10,6 +10,14 @@ class Welcome extends CI_Controller {
 		$this->load->view('welcome_message', $this->data);
 	}
 
+	public function next()
+	{
+		$this->data['post_unread'] = $this->get_zd();
+
+		$this->redirect(end($this->data['post_unread'])->hash);exit;
+		
+	}
+
 	private function get_zd()
 	{
 		$post_unread = $this->load_zd();
