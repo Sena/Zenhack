@@ -109,12 +109,6 @@ class Zenhack
     {
         if (count($filter) > 0) {
             foreach ($array as $array_key => $array_row) {
-                if($this->datetime_limit !== null && $this->datetime_limit > $array_row->updated_at) {
-
-                    unset($array[$array_key]);                    
-                    $this->log('Removed post: ' . var_export($array_row, true));
-                    continue;
-                }
                 foreach ($array_row as $key => $row) {
                     if (!in_array($key, $filter)) {
                         unset($array_row->$key);
@@ -173,6 +167,13 @@ class Zenhack
         $this->post_unread[] = $post_unread;
 
         $this->log($this->post_unread_limit . ' - ' . count($this->post_unread));
+        
+        if($this->datetime_limit !== null && $this->datetime_limit > $post_unread->updated_at) {
+            $this->stop_seek = true;
+            $this->log('Limited at :' . $post_unread->updated_at);
+        }else {
+            $this->log('Date :' . $post_unread->updated_at);
+        }
 
         if ($this->post_unread_limit && count($this->post_unread) >= $this->post_unread_limit) {
             $this->log('limitado');
