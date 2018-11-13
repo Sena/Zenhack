@@ -9,5 +9,10 @@ class Zenhack extends \zh\Zenhack
     {
         set_time_limit(-1);
         parent::__construct($param['subdomain']);
+    }    
+
+    protected function write_file($text, $name = 'log.txt')
+    {
+        log_message('info', $text);
     }
 }

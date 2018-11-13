@@ -11,36 +11,36 @@ class Zenhack
     /**
      * @var array
      */
-    private $author_list = array();
+    protected $author_list = array();
 
-    private $subdomain = null;
-    private $datetime_limit = null;
+    protected $subdomain = null;
+    protected $datetime_limit = null;
     
 
     /**
      * @var array
      */
-    private $post_unread = array();
+    protected $post_unread = array();
     /**
      * @var bool|int
      */
-    private $post_unread_limit = false;
+    protected $post_unread_limit = false;
     /**
      * @var array
      */
-    private $post_read = array();
+    protected $post_read = array();
     /**
      * @var bool|int
      */
-    private $post_read_limit = false;
+    protected $post_read_limit = false;
     /**
      * @var bool
      */
-    private $stop_seek = false;
+    protected $stop_seek = false;
     /**
      * @var bool
      */
-    private $log = false;
+    protected $log = false;
 
     public function __construct($subdomain)
     {
@@ -105,7 +105,7 @@ class Zenhack
      * @param array $filter
      * @return array
      */
-    private function filter(Array $array, Array $filter = array())
+    protected function filter(Array $array, Array $filter = array())
     {
         if (count($filter) > 0) {
             foreach ($array as $array_key => $array_row) {
@@ -130,7 +130,7 @@ class Zenhack
     /**
      *
      */
-    private function make_call()
+    protected function make_call()
     {
         $param = 'per_page=100&sort_by=recent_activity';
         $post_url = 'https://' . $this->subdomain . '.zendesk.com/api/v2/community/posts.json?' . $param;
@@ -168,7 +168,7 @@ class Zenhack
     /**
      * @param $post_unread
      */
-    private function set_post_unread($post_unread)
+    protected function set_post_unread($post_unread)
     {
         $this->post_unread[] = $post_unread;
 
@@ -183,7 +183,7 @@ class Zenhack
     /**
      * @param $post_read
      */
-    private function set_post_read($post_read)
+    protected function set_post_read($post_read)
     {
         $this->post_read[] = $post_read;
 
@@ -196,7 +196,7 @@ class Zenhack
      * @param int $id
      * @return array
      */
-    private function find_comments($post_id, $comment_count)
+    protected function find_comments($post_id, $comment_count)
     {
         $file_data = null;
 
@@ -223,7 +223,7 @@ class Zenhack
      * @param array $data
      * @return bool
      */
-    private function check_author(Array $data)
+    protected function check_author(Array $data)
     {
         if (count($data) === 0) {
             $this->log('empty data: ');
@@ -240,7 +240,7 @@ class Zenhack
      * @param string $url
      * @return array|mixed
      */
-    private function curl($url)
+    protected function curl($url)
     {
         if ($this->stop_seek) {
             return array();
@@ -265,15 +265,14 @@ class Zenhack
     /**
      * @param string $data
      */
-    private function log($data)
+    protected function log($data)
     {
         if ($this->log) {
             $text = date('Y-m-d H:i:s') . ' - ' . $data;
             $this->write_file($text);
         }
     }
-
-    private function write_file($text, $name = 'log.txt')
+    protected function write_file($text, $name = 'log.txt')
     {
         $text .= PHP_EOL;
         $file = fopen($name, 'a');

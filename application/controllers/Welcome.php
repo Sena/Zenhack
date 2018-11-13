@@ -5,7 +5,7 @@ class Welcome extends CI_Controller {
 
 	public function index()
 	{
-		$this->data['post_unread'] = $this->get_zd();
+		$this->data['post_unread'] = $this->get_zd(true);
 
 		$this->load->view('welcome_message', $this->data);
 	}
@@ -18,9 +18,9 @@ class Welcome extends CI_Controller {
 		
 	}
 
-	private function get_zd()
+	private function get_zd($force = false)
 	{
-		$post_unread = $this->load_zd();
+		$post_unread = $this->load_zd($force);
 
 		$this->load->model('scape_model');
 
@@ -35,11 +35,11 @@ class Welcome extends CI_Controller {
 		return $post_unread;
 	}
 
-	private function load_zd()
+	private function load_zd($force)
 	{		
 		$post_unread = $this->session->userdata('post_unread');
 
-		if($post_unread && count($post_unread) > 0) {
+		if($force === false && $post_unread && count($post_unread) > 0) {
 			return $post_unread;
 		}
 
@@ -87,18 +87,19 @@ class Welcome extends CI_Controller {
 	{
 		$post_unread = $this->get_zd();
 		if(isset($post_unread[$hash])) {
-			$this->scape_post($hash);
+			$this->scape_post($post_unread[$hash]);
 			redirect($post_unread[$hash]->html_url);
 		}
 		redirect();
 	}
 
-	private function scape_post($hash)
+	private function scape_post($post)
 	{
 		$this->load->model('scape_model');
 
 		$this->scape_model->insert(array(
-			'hash' => $hash,
+			'hash' => $post->hash,
+			'dump' => serialize($post),
 		));
 	}
 }
