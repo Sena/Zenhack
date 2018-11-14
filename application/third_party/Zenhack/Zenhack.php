@@ -72,7 +72,11 @@ class Zenhack
         }
         $this->log('process ended');
 
-        return $this->filter($this->post_unread, $filter);
+        $return = $this->filter($this->post_unread, $filter);
+        
+        $this->log(__METHOD__ . ': ' . var_export($return, true));
+
+        return $return;
     }
 
     /**
@@ -97,7 +101,11 @@ class Zenhack
         if (count($this->post_read) == 0) {
             $this->make_call();
         }
-        return $this->filter($this->post_read, $filter);
+        $return = $this->filter($this->post_read, $filter);
+        
+        $this->log(__METHOD__ . ': ' . var_export($return, true));
+
+        return $return;
     }
 
     /**
@@ -210,7 +218,8 @@ class Zenhack
         }
 
         if($file_data === null) {
-            $data = $this->curl('https://' . $this->subdomain . '.zendesk.com/api/v2/help_center/community/posts/' . $post_id . '/comments.json');
+            $param = 'per_page=100&sort_by=recent_activity';
+            $data = $this->curl('https://' . $this->subdomain . '.zendesk.com/api/v2/help_center/community/posts/' . $post_id . '/comments.json?' . $param);
             if (isset($data->comments)) {
                 $_SESSION['post' . $post_id]['cc' . $comment_count] = $data;
             }else{
