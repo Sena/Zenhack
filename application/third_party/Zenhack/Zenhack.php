@@ -44,9 +44,6 @@ class Zenhack
 
     public function __construct($subdomain)
     {
-        if(!isset($_SESSION)) {
-            session_start();
-        }
         $this->subdomain = $subdomain;
     }
 
@@ -200,6 +197,23 @@ class Zenhack
             $this->stop_seek = true;
         }
     }
+    protected function unset_store($key) {
+        if(!isset($_SESSION)) {
+            session_start();
+        }
+        unset($_SESSION[$key]);
+    }
+
+    protected function store($key, $value = null)
+    {
+        if(!isset($_SESSION)) {
+            session_start();
+        }
+        if($value === null) {
+            return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
+        }
+        $_SESSION[$key] = $value;
+    }
 
     /**
      * @param int $id
@@ -207,26 +221,27 @@ class Zenhack
      */
     protected function find_comments($post_id, $comment_count)
     {
-        $file_data = null;
+        $store_key = 'post' . $post_id;
+        $store_value = $this->store($store_key);
 
-        if (isset($_SESSION['post' . $post_id]['cc' . $comment_count])) {
-            $this->log('Reading: $_SESSION[post' . $post_id . '][cc' . $comment_count . ']');
-            $file_data = $_SESSION['post' . $post_id]['cc' . $comment_count];
-        } elseif (isset($_SESSION['post' . $post_id])) {
-            $this->log('Cleaning: $_SESSION[post' . $post_id . ']');
-            unset($_SESSION['post' . $post_id]);
+        if (isset($store_value['cc' . $comment_count])) {
+            $this->log('Reading: store_value(' . $store_key . '[cc' . $comment_count . ')');
+        } elseif ($store_value !== null) {
+            $this->log('Cleaning: store_value(' . $store_key . ')');
+            $this->unset_store($store_key);
         }
 
-        if($file_data === null) {
+        if($store_value === null) {
             $param = 'per_page=100&sort_by=recent_activity';
             $data = $this->curl('https://' . $this->subdomain . '.zendesk.com/api/v2/help_center/community/posts/' . $post_id . '/comments.json?' . $param);
             if (isset($data->comments)) {
-                $_SESSION['post' . $post_id]['cc' . $comment_count] = $data;
+                $store_value['cc' . $comment_count] = $data;
+                $this->store($store_key, $store_value);
             }else{
-                $this->log('not put' . $post_id);
+                $this->log('not put' . $store_key);
             }
         }
-        return isset($_SESSION['post' . $post_id]['cc' . $comment_count]->comments) ? $_SESSION['post' . $post_id]['cc' . $comment_count]->comments : array();
+        return isset($store_value['cc' . $comment_count]->comments) ? $store_value['cc' . $comment_count]->comments : array();
     }
 
     /**
