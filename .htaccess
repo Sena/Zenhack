@@ -1,3 +1,6 @@
 RewriteEngine on
 RewriteCond $1 !^(index\.php|assets|robots\.txt)
 RewriteRule ^(.*)$ index.php/$1 [L]
+
+SetEnvIf Host \[::1\]$ CI_ENV=development
+SetEnvIf Host localhost$ CI_ENV=development
