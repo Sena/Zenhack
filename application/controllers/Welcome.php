@@ -43,11 +43,13 @@ class Welcome extends CI_Controller {
 			return $post_unread;
 		}
 
-		$this->load->library('zenhack', array('subdomain' => 'pagsegurodev'));
+		$this->load->library('zenhack', array(
+			'subdomain' => 'pagsegurodev',
+			'log' => true,
+		));
 
 		$this->zenhack->set_datetime_limit(date('Y-m-d H:i:s', strtotime("-7 days")));
 
-		$this->zenhack->log_active();
 		//you may set the user that should write the last comments
 		$this->zenhack->filter_author('6018311238');
 		$this->zenhack->filter_author('13468838768');
@@ -74,6 +76,7 @@ class Welcome extends CI_Controller {
 			'vote_sum',
 			'updated_at',
 		), 100);
+
 
 		foreach ($post_unread as $key => $row) {
 			$row->br_updated_at = date('d-m-Y H:i:s', strtotime($row->updated_at));

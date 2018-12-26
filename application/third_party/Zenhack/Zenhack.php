@@ -42,9 +42,10 @@ class Zenhack
      */
     protected $log = false;
 
-    public function __construct($subdomain)
+    public function __construct($subdomain, $log = false)
     {
         $this->subdomain = $subdomain;
+        $this->log = $log;
     }
 
     public function filter_author($author, $clear = false)
@@ -281,7 +282,9 @@ class Zenhack
 
         return json_decode($data);
     }
-
+    /**
+     * @deprecated No longer used by internal code and not recommended.
+     */
     public function log_active($status = true)
     {
         $this->log = !$status == false;
