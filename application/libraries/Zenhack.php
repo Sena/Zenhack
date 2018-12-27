@@ -75,7 +75,7 @@ class Zenhack extends \zh\Zenhack
                     return null;
                 }
                 $data = current($data);
-                $data = unserialize($data->v);
+                $data = unserialize(base64_decode($data->v));
                 return $data;
             }else{
                 return $this->ci->session->userdata($key);
@@ -87,7 +87,7 @@ class Zenhack extends \zh\Zenhack
             $this->ci->zdb_model->delete(array('k' => $key));
             $this->ci->zdb_model->insert(array(
                 'k' => $key,
-                'v' => serialize($value),
+                'v' => base64_encode(serialize($value)),
             ));
         }else{
             $this->ci->session->set_userdata($key, $value);
