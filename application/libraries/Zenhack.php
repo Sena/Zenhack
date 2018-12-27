@@ -57,40 +57,51 @@ class Zenhack extends \zh\Zenhack
 
     protected function unset_store($key) {
         if($this->use_db){
-            $this->ci->load->model('zdb_model');
-            $this->ci->zdb_model->delete(array('k' => $key));
+            $this->db_unset_store($key);
         }else{
-            $this->ci->session->unset_userdata($key);
+            $this->session_unset_store($key);
         }
     }
 
     protected function store($key, $value = null)
     {
+        return $this->use_db ? $this->db_store($key, $value) : $this->session_store($key, $value);
+    }
 
+    private function session_unset_store($key) {
+        $this->ci->session->unset_userdata($key);
+    }
+
+    private function db_unset_store($key) {
+        $this->ci->load->model('zdb_model');
+        $this->ci->zdb_model->delete(array('k' => $key));
+    }    
+    private function session_store($key, $value = null)
+    {
         if($value === null) {
-            if($this->use_db){
-                $this->ci->load->model('zdb_model');
-                $data = $this->ci->zdb_model->get(array('k' => $key))->result();
-                if(count($data) === 0) {
-                    return null;
-                }
-                $data = current($data);
-                $data = unserialize(base64_decode($data->v));
-                return $data;
-            }else{
-                return $this->ci->session->userdata($key);
-            }
-        }        
-        
-        if($this->use_db){
-            $this->ci->load->model('zdb_model');
-            $this->ci->zdb_model->delete(array('k' => $key));
-            $this->ci->zdb_model->insert(array(
-                'k' => $key,
-                'v' => base64_encode(serialize($value)),
-            ));
-        }else{
-            $this->ci->session->set_userdata($key, $value);
+            return $this->ci->session->userdata($key);
         }
+        $this->ci->session->set_userdata($key, $value);
+        return $value;
+    }
+    private function db_store($key, $value = null)
+    {
+        $this->ci->load->model('zdb_model');
+        if($value === null) {
+            $data = $this->ci->zdb_model->get(array('k' => $key))->result();
+            if(count($data) === 0) {
+                return null;
+            }
+            $data = current($data);
+            $data = unserialize(base64_decode($data->v));
+            return $data;
+        }
+        $this->ci->zdb_model->delete(array('k' => $key));
+        $this->db_unset_store($key);
+        $this->ci->zdb_model->insert(array(
+            'k' => $key,
+            'v' => base64_encode(serialize($value)),
+        ));
+        return $value;
     }
 }
