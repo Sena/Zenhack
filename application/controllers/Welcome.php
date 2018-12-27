@@ -45,7 +45,8 @@ class Welcome extends CI_Controller {
 
 		$this->load->library('zenhack', array(
 			'subdomain' => 'pagsegurodev',
-			'log' => true,
+			'log' => $this->input->get('log') == '0' ? false : true,
+			'use_db' => $this->input->get('use_db') == '0' ? false : true, 
 		));
 
 		$this->zenhack->set_datetime_limit(date('Y-m-d H:i:s', strtotime("-7 days")));
@@ -102,7 +103,7 @@ class Welcome extends CI_Controller {
 
 		$this->scape_model->insert(array(
 			'hash' => $post->hash,
-			'dump' => serialize($post),
+			'dump' => base64_encode(serialize($post)),
 		));
 	}
 }
