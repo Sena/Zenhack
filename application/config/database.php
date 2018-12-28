@@ -77,7 +77,7 @@ $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	'username' => (ENVIRONMENT !== 'production') ? 'root' : 'iocodeco_zh',
-	'password' =>  (ENVIRONMENT !== 'production') ? 'root' : 'iocodeco_zh',
+	'password' => (ENVIRONMENT !== 'production') ? 'root' : 'iocodeco_zh',
 	'database' => 'iocodeco_zh',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
