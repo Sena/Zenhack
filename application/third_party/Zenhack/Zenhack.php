@@ -44,6 +44,7 @@ class Zenhack
 
     public function __construct($subdomain, $log = false)
     {
+        $this->set_datetime_limit(date('Y-m-d H:i:s', strtotime("-730 days")));
         $this->subdomain = $subdomain;
         $this->log = $log;
     }
@@ -136,6 +137,7 @@ class Zenhack
         $post_url = 'https://' . $this->subdomain . '.zendesk.com/api/v2/community/posts.json?' . $param;
 
         while (strlen($post_url) > 30 && $this->stop_seek === false) {
+            
             $posts = $this->curl($post_url);
 
             foreach ($posts->posts as $post_key => $post_row) {
@@ -145,22 +147,34 @@ class Zenhack
 
                 $post_row->comments = array();
 
-                if ($post_row->comment_count == 0) {
-                    $this->set_post_unread($post_row);
+                if ($post_row->comment_count == 0) {      
+                    $this->log('post created at: ' . $post_row->created_at);
+                    if($this->datetime_limit <= $post_row->created_at) {
+                        $this->log('new post: ' . $post_row->id);
+                        $this->log('post created at: ' . $post_row->created_at);
+                        $this->set_post_unread($post_row);
+                    }else{
+                        $this->log('old post: ' . $post_row->id);
+                    }
                 } else {
                     $post_row->comments = $this->find_comments($post_row->id, $post_row->comment_count);
 
                     if (count($post_row->comments) > 0) {
-                        $this->log('$post_row->id: ' . $post_row->id);
+                        $this->log('post with comments: ' . $post_row->id);
                         if ($this->check_author($post_row->comments, $this->author_list) === false) {
+                            $this->log('post with comments - they: ' . $post_row->id);
                             $this->set_post_unread($post_row);
                         } else {
+                            $this->log('post with comments - ours: ' . $post_row->id);
                             $this->set_post_read($post_row);
                         }
                     }
                 }
             }
 
+            if($posts->next_page === null) {
+                $this->stop_seek = true;
+            }
             $post_url = $posts->next_page . '&' . $param;
         }
     }
@@ -174,7 +188,7 @@ class Zenhack
 
         $this->log($this->post_unread_limit . ' - ' . count($this->post_unread));
         
-        if($this->datetime_limit !== null && $this->datetime_limit > $post_unread->updated_at) {
+        if($this->datetime_limit > $post_unread->updated_at) {
             $this->stop_seek = true;
             $this->log('Limited at :' . $post_unread->updated_at);
         }else {
@@ -233,13 +247,20 @@ class Zenhack
         }
 
         if($store_value === null) {
-            $param = 'per_page=100&sort_by=recent_activity';
+            $param = 'per_page=1&sort_by=recent_activity';
             $data = $this->curl('https://' . $this->subdomain . '.zendesk.com/api/v2/help_center/community/posts/' . $post_id . '/comments.json?' . $param);
-            if (isset($data->comments)) {
-                $store_value['cc' . $comment_count] = $data;
-                $this->store($store_key, $store_value);
+            
+            if (isset($data->comments)) {                
+                $this->log('comment date: ' . $data->comments[0]->created_at);
+
+                if($this->datetime_limit <= $data->comments[0]->created_at) {
+                    $store_value['cc' . $comment_count] = $data;
+                    $this->store($store_key, $store_value);
+                }else{
+                    $this->log('comment skiped - ' . $store_key);
+                }
             }else{
-                $this->log('not put' . $store_key);
+                $this->log('comment with problem - ' . $store_key);
             }
         }
         return isset($store_value['cc' . $comment_count]->comments) ? $store_value['cc' . $comment_count]->comments : array();

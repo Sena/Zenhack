@@ -88,13 +88,20 @@ class Zenhack extends \zh\Zenhack
     {
         $this->ci->load->model('zdb_model');
         if($value === null) {
-            $data = $this->ci->zdb_model->get(array('k' => $key))->result();
-            if(count($data) === 0) {
+            $value = $this->session_store($key);
+            
+            if($value !== null) {
+                return $value;
+            }
+
+            $value = $this->ci->zdb_model->get(array('k' => $key))->result();
+            if(count($value) === 0) {
                 return null;
             }
-            $data = current($data);
-            $data = unserialize(base64_decode($data->v));
-            return $data;
+            $value = current($value);
+            $value = unserialize(base64_decode($value->v));
+            $this->session_store($key, $value);
+            return $value;
         }
         $this->ci->zdb_model->delete(array('k' => $key));
         $this->db_unset_store($key);
@@ -102,6 +109,7 @@ class Zenhack extends \zh\Zenhack
             'k' => $key,
             'v' => base64_encode(serialize($value)),
         ));
+        $this->session_store($key, $value);
         return $value;
     }
 }

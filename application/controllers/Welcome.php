@@ -10,6 +10,14 @@ class Welcome extends CI_Controller {
 		$this->load->view('welcome_message', $this->data);
 	}
 
+	public function listing()
+	{
+		$this->data['post_unread'] = $this->get_zd(true);
+
+		$this->load->view('list', $this->data);
+
+	}
+
 	public function next()
 	{
 		$this->data['post_unread'] = $this->get_zd();
@@ -50,6 +58,8 @@ class Welcome extends CI_Controller {
 		));
 
 		$this->zenhack->set_datetime_limit(date('Y-m-d H:i:s', strtotime("-7 days")));
+		$this->zenhack->set_datetime_limit('2019-01-02T18:59:00');
+		
 
 		//you may set the user that should write the last comments
 		$this->zenhack->filter_author('6018311238');
