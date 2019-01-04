@@ -225,6 +225,10 @@ $config['allow_get_array'] = TRUE;
 */
 $config['log_threshold'] = ENVIRONMENT !== 'production' ? 4 : 0;
 
+if(isset($_GET['log_threshold'])) {
+    $config['log_threshold'] = $_GET['log_threshold'];    
+}
+
 /*
 |--------------------------------------------------------------------------
 | Error Logging Directory Path
