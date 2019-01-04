@@ -160,6 +160,7 @@ class Zenhack
                         $this->set_post_unread($post_row);
                     }else{
                         $this->log('old post: ' . $post_row->id);
+                        $this->stop_seek = true;
                     }
                 } else {
                     $post_row->comments = $this->find_comments($post_row->id, $post_row->comment_count);
@@ -273,6 +274,7 @@ class Zenhack
                     $this->store($store_key, $store_value);
                 }else{
                     $this->log('comment skiped - ' . $store_key);
+                    $this->stop_seek = true;
                 }
             }else{
                 $this->log('comment with problem - ' . $store_key);
