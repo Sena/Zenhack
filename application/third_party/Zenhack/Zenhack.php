@@ -140,6 +140,11 @@ class Zenhack
             
             $posts = $this->curl($post_url);
 
+            if(!isset($posts->posts) || count($posts->posts) === 0) {
+                $this->log('not found posts in $post: ' . var_export($posts, true));
+                continue;
+            }
+
             foreach ($posts->posts as $post_key => $post_row) {
                 if($this->stop_seek !== false) {
                     break;
