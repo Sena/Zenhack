@@ -213,7 +213,17 @@ class Zenhack
     {
         $this->post_read[] = $post_read;
 
+        $this->log($this->post_read_limit . ' - ' . count($this->post_read));
+        
+        if($this->datetime_limit > $post_read->updated_at) {
+            $this->stop_seek = true;
+            $this->log('Limited at :' . $post_read->updated_at);
+        }else {
+            $this->log('Date :' . $post_read->updated_at);
+        }
+
         if ($this->post_read_limit && count($this->post_read) >= $this->post_read_limit) {
+            $this->log('limitado');
             $this->stop_seek = true;
         }
     }
