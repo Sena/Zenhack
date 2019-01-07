@@ -19,9 +19,17 @@
         <?=$yesterday;?>
     </p>
     <p>
+        <strong>Esta semana, até agora</strong>:<br>
+        <?=$thisweek;?>
+    </p>
+    <p>
         <strong>Últimos 7 dias</strong>:<br>
         <?=$days7;?>
     </p>
+    <p>
+        <strong>Semana passada</strong>:<br>
+        <?=$lastweek;?>
+    </p>    
     <p>
         <strong>Este mês, até agora</strong>:<br>
         <?=$month;?>
