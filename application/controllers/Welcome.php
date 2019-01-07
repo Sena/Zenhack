@@ -52,7 +52,7 @@ class Welcome extends CI_Controller {
 		}
 
 		$this->load->library('zenhack', array(
-			'subdomain' => 'pagsegurodev',
+			'subdomain' => 'support',
 			'log' => $this->input->get('log') == '0' ? false : true,
 			'use_db' => $this->input->get('use_db') == '0' ? false : true, 
 		));
