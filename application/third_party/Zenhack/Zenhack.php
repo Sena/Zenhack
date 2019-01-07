@@ -140,6 +140,14 @@ class Zenhack
             
             $posts = $this->curl($post_url);
 
+            if(isset($posts->status) && $posts->status == 500) {
+                die('Zendesk is out');
+            }
+
+            if($this->stop_seek !== false) {
+                break;
+            }
+
             if(!isset($posts->posts) || count($posts->posts) === 0) {
                 $this->log('not found posts in $post: ' . var_export($posts, true));
                 continue;
