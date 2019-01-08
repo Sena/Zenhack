@@ -10,26 +10,26 @@
 </head>
 <body>
 <h1>Interações realizadas</h1>
-    <p>
+    <p class="diff_<?=$today_diff_status;?>">
         <strong>Hoje, até agora</strong>:<br>
-        <?=$today;?>
+        <?=$today;?> - <?=$today_diff;?>% <?=$today_diff_status == 'up' ? '△': '▽';?>
     </p>
     <p>
         <strong>Ontem</strong>:<br>
         <?=$yesterday;?>
     </p>
-    <p>
+    <p class="diff_<?=$thisweek_diff_status;?>">
         <strong>Esta semana, até agora</strong>:<br>
-        <?=$thisweek;?>
+        <?=$thisweek;?> - <?=$thisweek_diff;?>% <?=$thisweek_diff_status == 'up' ? '△': '▽';?>
+    </p>
+    <p>
+        <strong>Semana passada</strong>:<br>
+        <?=$lastweek;?>
     </p>
     <p>
         <strong>Últimos 7 dias</strong>:<br>
         <?=$days7;?>
     </p>
-    <p>
-        <strong>Semana passada</strong>:<br>
-        <?=$lastweek;?>
-    </p>    
     <p>
         <strong>Este mês, até agora</strong>:<br>
         <?=$month;?>

@@ -24,7 +24,7 @@ class Report extends CI_Controller {
 
 		foreach($data as $row) {
 			if(date('Y-m') == date('Y-m', strtotime($row->date))) {
-			    $this->data['month']++;
+			    $this->data['month']++;  
 			}
 			if(date('Y-m-d 00:00:00', strtotime("-7 days")) <= $row->date) {
 				$this->data['days7']++;
@@ -41,6 +41,30 @@ class Report extends CI_Controller {
 			    $this->data['today']++;
 			}
 		}
+		
+		if($this->data['today'] == $this->data['yesterday']) {
+		    $this->data['today_diff'] = '0';
+		    $this->data['today_diff_status'] = 'same';
+		    
+		}elseif($this->data['today'] > $this->data['yesterday']) {
+		    $this->data['today_diff'] = round($this->data['today'] / $this->data['yesterday'], 2);
+		    $this->data['today_diff_status'] = 'up';
+		}else{
+		    $this->data['today_diff'] = round($this->data['yesterday'] / $this->data['today'], 2);
+		    $this->data['today_diff_status'] = 'down';
+		}
+		
+		if($this->data['thisweek'] == $this->data['lastweek']) {
+		    $this->data['thisweek_diff_status'] = '0';
+		    $this->data['thisweek_diff'] = 'same';
+		}elseif($this->data['thisweek'] > $this->data['lastweek']) {
+		    $this->data['thisweek_diff'] = round($this->data['thisweek'] / $this->data['lastweek'], 2);
+		    $this->data['thisweek_diff_status'] = 'up';
+		}else{
+		    $this->data['thisweek_diff'] = round($this->data['lastweek'] / $this->data['thisweek'], 2);
+		    $this->data['thisweek_diff_status'] = 'down';
+		}
+		
 		$this->load->view('report', $this->data);
 	}
     
