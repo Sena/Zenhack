@@ -52,7 +52,7 @@ class Welcome extends CI_Controller {
 		}
 
 		$this->load->library('zenhack', array(
-			'subdomain' => 'support',
+			'subdomain' => 'pagsegurodev',
 			'log' => $this->input->get('log') == '0' ? false : true,
 			'use_db' => $this->input->get('use_db') == '0' ? false : true, 
 		));
@@ -83,13 +83,19 @@ class Welcome extends CI_Controller {
 			'title',
 			'details',
 			'comment_count',
-			'html_url',
-			'vote_sum',
-			'updated_at',
+		    'html_url',
+		    'vote_sum',
+		    'comments',
+		    'created_at',
+		    'updated_at',
+		    'comments',
 		), 100);
 
-
 		foreach ($post_unread as $key => $row) {
+		    $row->created_at = $this->convertTimezone($row->created_at);
+		    $row->updated_at = $this->convertTimezone($row->updated_at);    
+		    
+		    $this->response_time($row);
 			$row->br_updated_at = date('d-m-Y H:i:s', strtotime($row->updated_at));
 			$row->hash = md5($row->id . $row->br_updated_at);
 			$return[$row->hash] = $row;
@@ -115,5 +121,55 @@ class Welcome extends CI_Controller {
 			'hash' => $post->hash,
 			'dump' => base64_encode(serialize($post)),
 		));
+	}
+	
+	private function response_time($post) {
+	    $date = NULL;
+	    if(isset($post->comments)) {
+	        if(count($post->comments) === 0) {
+	            $date = $post->created_at;
+	        }else{
+	            $comment_created_at = null;
+	            $comment_we = false;
+	            
+	            foreach ($post->comments as $comment) {
+	                $comment->created_at = $this->convertTimezone($comment->created_at);
+	                $comment->updated_at = $this->convertTimezone($comment->updated_at);
+	                
+	                if($comment->we) {
+	                    $comment_we = true;
+	                    break;
+	                }
+	                $comment_created_at = $comment->created_at;
+	            }
+	            
+	            if($comment_we === true) {
+	                $date = $comment_created_at;
+	            }else{
+	                $date = $post->created_at;
+	            }
+	        }
+	    }
+	    $post->initial_date = $date;
+	    
+	    $date_diff = new DateTime($date);
+	    $date_diff = $date_diff->diff(new DateTime());
+	    $hour = $date_diff->days * 24 * 60;
+	    $hour += $date_diff->h * 60;
+	    $post->response_time = $hour;
+	    
+	}
+	
+	private function convertTimezone($date = null)
+	{   
+	    $userTimezone = new DateTimeZone(date_default_timezone_get());
+	    $gmtTimezone = new DateTimeZone('GMT');
+	    
+	    $myDateTime = new DateTime($date, $gmtTimezone);
+	    
+	    $offset = $userTimezone->getOffset($myDateTime);
+	    $myInterval=DateInterval::createFromDateString((string)$offset . 'seconds');
+	    $myDateTime->add($myInterval);
+	    return $myDateTime->format('Y-m-d H:i:s');
 	}
 }

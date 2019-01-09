@@ -14,58 +14,87 @@ class Report extends CI_Controller {
 			'date >=' => date('Y-m-d 00:00:00', strtotime("-30 days"))
 		))->result();
 
-		$this->data['days30'] = count($data);
-		$this->data['month'] = 0;
-		$this->data['days7'] = 0;
-		$this->data['thisweek'] = 0;
-		$this->data['lastweek'] = 0;
-		$this->data['yesterday'] = 0;
-		$this->data['today'] = 0;
+		$this->data['days30'] = new Zenpost();
+		$this->data['month'] = new Zenpost();
+		$this->data['days7'] = new Zenpost();
+		$this->data['thisweek'] = new Zenpost();
+		$this->data['lastweek'] = new Zenpost();
+		$this->data['yesterday'] = new Zenpost();
+		$this->data['today'] = new Zenpost();
+		$this->data['days30']->count = count($data);
+		$this->data['days30']->dump = $data;
 
-		foreach($data as $row) {
-			if(date('Y-m') == date('Y-m', strtotime($row->date))) {
-			    $this->data['month']++;  
+		foreach($data as $row) {		    
+		    $row->post = base64_decode($row->dump);
+		    $row->post = unserialize($row->post);
+		    unset($row->dump);
+		    
+		    if(date('Y-m') == date('Y-m', strtotime($row->date))) {
+		        $this->data['month']->count++;
+		        $this->data['month']->dump[] = $row;
 			}
 			if(date('Y-m-d 00:00:00', strtotime("-7 days")) <= $row->date) {
-				$this->data['days7']++;
+			    $this->data['days7']->count++;
+			    $this->data['days7']->dump[] = $row;
 			}
 			if($this_week_start <= $row->date) {
-			    $this->data['thisweek']++;
+			    $this->data['thisweek']->count++;
+			    $this->data['thisweek']->dump[] = $row;
 			}elseif($last_week_start <= $row->date) {
-			    $this->data['lastweek']++;
+			    $this->data['lastweek']->count++;
+			    $this->data['lastweek']->dump[] = $row;
 			}
 			if(date('Y-m-d', strtotime("-1 days")) == date('Y-m-d', strtotime($row->date))) {
-			    $this->data['yesterday']++;
+			    $this->data['yesterday']->count++;
+			    $this->data['yesterday']->dump[] = $row;
 			}
 			if(date('Y-m-d') == date('Y-m-d', strtotime($row->date))) {
-			    $this->data['today']++;
+			    $this->data['today']->count++;
+			    $this->data['today']->dump[] = $row;
 			}
 		}
 		
-		if($this->data['today'] == $this->data['yesterday']) {
+		if($this->data['today']->count == $this->data['yesterday']->count) {
 		    $this->data['today_diff'] = '0';
 		    $this->data['today_diff_status'] = 'same';
 		    
-		}elseif($this->data['today'] > $this->data['yesterday']) {
-		    $this->data['today_diff'] = round($this->data['today'] / $this->data['yesterday'], 2);
+		}elseif($this->data['today']->count > $this->data['yesterday']->count) {
+		    $this->data['today_diff'] = round($this->data['today']->count / $this->data['yesterday']->count, 2);
 		    $this->data['today_diff_status'] = 'up';
 		}else{
-		    $this->data['today_diff'] = round($this->data['yesterday'] / $this->data['today'], 2);
+		    $this->data['today_diff'] = round($this->data['yesterday']->count / $this->data['today']->count, 2);
 		    $this->data['today_diff_status'] = 'down';
 		}
 		
-		if($this->data['thisweek'] == $this->data['lastweek']) {
+		if($this->data['thisweek']->count == $this->data['lastweek']->count) {
 		    $this->data['thisweek_diff_status'] = '0';
 		    $this->data['thisweek_diff'] = 'same';
-		}elseif($this->data['thisweek'] > $this->data['lastweek']) {
-		    $this->data['thisweek_diff'] = round($this->data['thisweek'] / $this->data['lastweek'], 2);
+		}elseif($this->data['thisweek']->count > $this->data['lastweek']->count) {
+		    $this->data['thisweek_diff'] = round($this->data['thisweek']->count / $this->data['lastweek']->count, 2);
 		    $this->data['thisweek_diff_status'] = 'up';
 		}else{
-		    $this->data['thisweek_diff'] = round($this->data['lastweek'] / $this->data['thisweek'], 2);
+		    $this->data['thisweek_diff'] = round($this->data['lastweek']->count / $this->data['thisweek']->count, 2);
 		    $this->data['thisweek_diff_status'] = 'down';
 		}
 		
+		$this->data['days30']->news_diff = $this->calc_news_diff($this->data['days30']->dump);
+		
 		$this->load->view('report', $this->data);
+	}
+	
+	private function calc_news_diff($dump) 
+	{
+	    $count = 0;
+	    $total = 0;
+	    
+	    foreach($dump as $row) {
+	        if(isset($row->post->response_time)) {
+	            $count++;
+	            $total += $row->post->response_time;
+	        }
+	    }
+	    
+	    return $count > 0 ? round($total / $count) : 0; 
 	}
     
 	/**
@@ -86,4 +115,10 @@ class Report extends CI_Controller {
 		
 		return $date;
 	}
+}
+
+class Zenpost
+{
+    public $count = 0;
+    public $dump = array();
 }

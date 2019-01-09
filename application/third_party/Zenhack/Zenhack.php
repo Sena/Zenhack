@@ -175,8 +175,12 @@ class Zenhack
 
                     if (count($post_row->comments) > 0) {
                         $this->log('post with comments: ' . $post_row->id);
-                        if ($this->check_author($post_row->comments, $this->author_list) === false) {
+                        
+                        $this->check_author($post_row);
+                        
+                        if (current($post_row->comments)->we == false) {
                             $this->log('post with comments - they: ' . $post_row->id);
+                            $this->log('post with comments - they: ' . var_export($post_row, true));
                             $this->set_post_unread($post_row);
                         } else {
                             $this->log('post with comments - ours: ' . $post_row->id);
@@ -271,7 +275,7 @@ class Zenhack
         }
 
         if($store_value === null) {
-            $param = 'per_page=1&sort_by=recent_activity';
+            $param = 'per_page=100&sort_by=recent_activity';
             $data = $this->curl('https://' . $this->subdomain . '.zendesk.com/api/v2/help_center/community/posts/' . $post_id . '/comments.json?' . $param);
             
             if (isset($data->comments)) {                
@@ -295,17 +299,11 @@ class Zenhack
      * @param array $data
      * @return bool
      */
-    protected function check_author(Array $data)
+    protected function check_author($data)
     {
-        if (count($data) === 0) {
-            $this->log('empty data: ');
-            return false;
+        foreach($data->comments as $comment) {
+            $comment->we = in_array($comment->author_id, $this->author_list);
         }
-        $data = current($data);
-
-        $this->log('$data->author_id: ' . $data->author_id);
-
-        return in_array($data->author_id, $this->author_list);
     }
 
     /**
