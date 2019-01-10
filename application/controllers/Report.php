@@ -54,7 +54,11 @@ class Report extends CI_Controller {
 			}
 		}
 		
-		if($this->data['today']->count == $this->data['yesterday']->count) {
+		if($this->data['today']->count == 0) {
+		    $this->data['today_diff'] = '0';
+		    $this->data['today_diff_status'] = 'same';
+		    
+		}elseif($this->data['today']->count == $this->data['yesterday']->count) {
 		    $this->data['today_diff'] = '0';
 		    $this->data['today_diff_status'] = 'same';
 		    
@@ -66,7 +70,11 @@ class Report extends CI_Controller {
 		    $this->data['today_diff_status'] = 'down';
 		}
 		
-		if($this->data['thisweek']->count == $this->data['lastweek']->count) {
+		if($this->data['thisweek']->count == 0) {
+		    $this->data['thisweek_diff'] = '0';
+		    $this->data['thisweek_diff_status'] = 'same';
+		    
+		}elseif($this->data['thisweek']->count == $this->data['lastweek']->count) {
 		    $this->data['thisweek_diff_status'] = '0';
 		    $this->data['thisweek_diff'] = 'same';
 		}elseif($this->data['thisweek']->count > $this->data['lastweek']->count) {
