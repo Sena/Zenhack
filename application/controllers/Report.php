@@ -62,12 +62,15 @@ class Report extends CI_Controller {
 		    $this->data['today_diff'] = '0';
 		    $this->data['today_diff_status'] = 'same';
 		    
-		}elseif($this->data['today']->count > $this->data['yesterday']->count) {
-		    $this->data['today_diff'] = round($this->data['today']->count / $this->data['yesterday']->count, 2);
-		    $this->data['today_diff_status'] = 'up';
-		}else{
-		    $this->data['today_diff'] = round($this->data['yesterday']->count / $this->data['today']->count, 2);
-		    $this->data['today_diff_status'] = 'down';
+		}else {
+		    $this->data['today_diff'] = ($this->data['today']->count - $this->data['yesterday']->count) / $this->data['yesterday']->count * 100;	    
+		    $this->data['today_diff'] = round($this->data['today_diff'], 2);
+		    
+		    if($this->data['today']->count > $this->data['yesterday']->count) {
+		        $this->data['today_diff_status'] = 'up';
+		    }else{
+		        $this->data['today_diff_status'] = 'down';
+		    }
 		}
 		
 		if($this->data['thisweek']->count == $this->data['lastweek']->count) {
@@ -77,12 +80,15 @@ class Report extends CI_Controller {
 		    $this->data['thisweek_diff'] = '0';
 		    $this->data['thisweek_diff_status'] = 'same';
 		    
-		}elseif($this->data['thisweek']->count > $this->data['lastweek']->count) {
-		    $this->data['thisweek_diff'] = round($this->data['thisweek']->count / $this->data['lastweek']->count, 2);
-		    $this->data['thisweek_diff_status'] = 'up';
-		}else{
-		    $this->data['thisweek_diff'] = round($this->data['lastweek']->count / $this->data['thisweek']->count, 2);
-		    $this->data['thisweek_diff_status'] = 'down';
+		}else {
+		    $this->data['thisweek_diff'] = ($this->data['thisweek']->count - $this->data['lastweek']->count) / $this->data['lastweek']->count * 100;
+		    $this->data['thisweek_diff'] = round($this->data['thisweek_diff'], 2);
+		    
+		    if($this->data['thisweek']->count > $this->data['lastweek']->count) {
+		        $this->data['thisweek_diff_status'] = 'up';
+		    }else{
+		        $this->data['thisweek_diff_status'] = 'down';
+		    }
 		}
 		
 		$this->data['days30']->news_diff = $this->calc_news_diff($this->data['days30']->dump);
