@@ -1,6 +1,15 @@
 .diff_up {
-	color: #007300;
+    color: #007300;
 }
+
 .diff_down {
-	color: #f00;
+    color: #f00;
+}
+
+.charts > canvas {
+    float: left;
+}
+
+.charts > canvas:last-child {
+    float: none;
 }

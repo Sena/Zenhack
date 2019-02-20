@@ -6,38 +6,104 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="assets/css/main.css">
+    <script src="assets/js/Chart.min.js"></script>
+    <script>
+    </script>
     <title>Zenhack - list</title>
 </head>
 <body>
 <h1>Interações realizadas</h1>
-	<p>Tempo de resposta do último mês: <?=$days30->news_diff;?> horas</p>
-    <p class="diff_<?=$today_diff_status;?>">
-        <strong>Hoje, até agora</strong>:<br>
-        <?=$today->count;?> - <?=$today_diff;?>% <?=$today_diff_status == 'up' ? '△': '▽';?>
-    </p>
-    <p>
-        <strong>Ontem</strong>:<br>
-        <?=$yesterday->count;?>
-    </p>
-    <p class="diff_<?=$thisweek_diff_status;?>">
-        <strong>Esta semana, até agora</strong>:<br>
-        <?=$thisweek->count;?> - <?=$thisweek_diff;?>% <?=$thisweek_diff_status == 'up' ? '△': '▽';?>
-    </p>
-    <p>
-        <strong>Semana passada</strong>:<br>
-        <?=$lastweek->count;?>
-    </p>
-    <p>
-        <strong>Últimos 7 dias</strong>:<br>
-        <?=$days7->count;?>
-    </p>
-    <p>
-        <strong>Este mês, até agora</strong>:<br>
-        <?=$month->count;?>
-    </p>
-    <p>
-        <strong>Últimos 30 dias</strong>:<br>
-        <?=$days30->count;?>
-    </p>
+<p>Tempo de resposta no mês atual: <?= $thismonth->news_diff; ?> horas</p>
+<div class="charts">
+    <canvas id="todayXyesterday" width="500" height="200"></canvas>
+    <canvas id="thisWeekXlastWeek" width="500" height="200"></canvas>
+    <canvas id="thisMonthXlastMonth" width="500" height="200"></canvas>
+</div>
+<script>
+    new Chart(document.getElementById("todayXyesterday"), {
+        "type": "bar",
+        "data": {
+            "datasets": [{
+                "label": "Hoje <?= $today_diff; ?>% <?= $today_diff_status == 'up' ? '△' : '▽'; ?>",
+                "data": [<?=$today->count;?>],
+                "fill": false,
+                "backgroundColor": ["rgba(12, 0, 202, 0.2)"],
+                "borderWidth": 1
+            }, {
+                "label": "Ontem <?= $yesterday_diff; ?>% <?= $yesterday_diff_status == 'up' ? '△' : '▽'; ?>",
+                "data": [<?=$yesterday->count;?>],
+                "fill": false,
+                "backgroundColor": ["rgba(123, 185, 2, 0.2)"],
+                "borderWidth": 1
+            }]
+        },
+        "options": {
+            responsive: false,
+            "scales": {
+                "yAxes": [{
+                    "ticks": {
+                        "beginAtZero": true
+                    }
+                }]
+            }
+        }
+    });
+    new Chart(document.getElementById("thisWeekXlastWeek"), {
+        "type": "bar",
+        "data": {
+            "datasets": [{
+                "label": "Essa semana <?=$thisweek_diff;?>% <?=$thisweek_diff_status == 'up' ? '△' : '▽';?>",
+                "data": [<?=$thisweek->count;?>],
+                "fill": false,
+                "backgroundColor": ["rgba(12, 0, 202, 0.2)"],
+                "borderWidth": 1
+            }, {
+                "label": "Semana passada <?=$lastweek_diff;?>% <?=$lastweek_diff_status == 'up' ? '△' : '▽';?>",
+                "data": [<?=$lastweek->count;?>],
+                "fill": false,
+                "backgroundColor": ["rgba(123, 185, 2, 0.2)"],
+                "borderWidth": 1
+            }]
+        },
+        "options": {
+            responsive: false,
+            "scales": {
+                "yAxes": [{
+                    "ticks": {
+                        "beginAtZero": true
+                    }
+                }]
+            }
+        }
+    });
+    new Chart(document.getElementById("thisMonthXlastMonth"), {
+        "type": "bar",
+        "data": {
+            "datasets": [{
+                "label": "Esse mês <?=$thismonth_diff;?>% <?=$thismonth_diff_status == 'up' ? '△' : '▽';?>",
+                "data": [<?=$thismonth->count;?>],
+                "fill": false,
+                "backgroundColor": ["rgba(12, 0, 202, 0.2)"],
+                "borderWidth": 1
+            }, {
+                "label": "Mês passado <?=$lastmonth_diff;?>% <?=$lastmonth_diff_status == 'up' ? '△' : '▽';?>",
+                "data": [<?=$lastmonth->count;?>],
+                "fill": false,
+                "backgroundColor": ["rgba(123, 185, 2, 0.2)"],
+                "borderWidth": 1
+            }]
+        },
+        "options": {
+            responsive: false,
+            "scales": {
+                "yAxes": [{
+                    "ticks": {
+                        "beginAtZero": true
+                    }
+                }]
+            }
+        }
+    });
+</script>
 </body>
 </html>
