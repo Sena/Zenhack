@@ -3,6 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Report extends CI_Controller {
 
+    private $dealDate = '2019-02-01';
+
 	public function index()
 	{
 	    $this->load->model('scape_model');
@@ -147,9 +149,8 @@ class Report extends CI_Controller {
 	{
 	    $count = 0;
 	    $total = 0;
-	    
 	    foreach($dump as $row) {
-	        if(isset($row->post->response_time)) {
+	        if(isset($row->post->response_time) && $row->post->created_at > $this->dealDate) {
 	            $count++;
 	            $total += $row->post->response_time;
 	        }
