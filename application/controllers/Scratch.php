@@ -117,6 +117,7 @@ class Scratch extends MY_Controller {
 		$this->load->model('scape_model');
 
 		$this->scape_model->insert(array(
+			'user_id' => $this->data['user']->id,
 			'hash' => $post->hash,
 			'dump' => base64_encode(serialize($post)),
 		));

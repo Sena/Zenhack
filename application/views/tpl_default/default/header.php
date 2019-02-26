@@ -32,13 +32,16 @@
             </button>
         </div>
     <?php endif;?>
-    <?php if($user):?>
+    <?php if(isset($user->id)):?>
     <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link home_index" href="./" target="_blank">Home</a>
+        </li>
         <li class="nav-item">
             <a class="nav-link" href="./proximo" target="_blank">Próximo</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link scratch_index" href="./">Pendentes</a>
+            <a class="nav-link scratch_index" href="./pendente">Pendentes</a>
         </li>
         <li class="nav-item">
             <a class="nav-link home_listing disabled" href="./lista">Lista</a>

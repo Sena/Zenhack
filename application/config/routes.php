@@ -50,6 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'home/index';
+$route['pendente'] = 'scratch/index';
 $route['next'] = 'scratch/next';
 $route['lista'] = 'scratch/listing';
 $route['proximo'] = 'scratch/next';
