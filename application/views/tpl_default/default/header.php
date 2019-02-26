@@ -32,12 +32,13 @@
             </button>
         </div>
     <?php endif;?>
+    <?php if($user):?>
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link home_index" href="./proximo" target="_blank">Próximo</a>
+            <a class="nav-link" href="./proximo" target="_blank">Próximo</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link home_index" href="./">Pendentes</a>
+            <a class="nav-link scratch_index" href="./">Pendentes</a>
         </li>
         <li class="nav-item">
             <a class="nav-link home_listing disabled" href="./lista">Lista</a>
@@ -53,3 +54,4 @@
             <a class="nav-link report_index" href="./relatorio">Relatório</a>
         </li>
     </ul>
+    <?php endif;?>
