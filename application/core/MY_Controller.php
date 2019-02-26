@@ -110,7 +110,7 @@ class  MY_Controller extends CI_Controller
     {
         $this->loadCss(array(
             'name' => 'main',
-            'path' => 'assets/adm/css/'
+            'path' => 'assets/css/'
         ), true);
 
         $this->loadJs(
