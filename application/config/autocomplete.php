@@ -91,6 +91,7 @@
  *
  * @property Products $Products
  * @property Scape_model $scape_model
+ * @property User_model $user_model
  *
  */
 class CI_Controller

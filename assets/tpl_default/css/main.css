@@ -5,3 +5,8 @@
 .diff_down {
     color: #f00;
 }
+
+table.table .action {
+    width: 80px;
+    text-align: center;
+}

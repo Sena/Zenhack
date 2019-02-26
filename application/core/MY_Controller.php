@@ -110,7 +110,7 @@ class  MY_Controller extends CI_Controller
             if($this->session->flashdata('msg')) {
                 $msg .= $this->session->flashdata('msg') . '<br>';
             }
-            $this->session->set_flashdata('error',  $msg . $str);
+            $this->session->set_flashdata('msg',  $msg . $str);
         }
     }
 
@@ -225,8 +225,22 @@ class  MY_Controller extends CI_Controller
 
         $this->loadJs(array(
             array(
+                'name' => 'popper.min',
+                'path' => 'assets/bootstrap/js/'
+            ),
+            array(
                 'name' => 'bootstrap.min',
                 'path' => 'assets/bootstrap/js/'
+            )
+        ), true);
+    }
+
+    protected function loadFontawesome()
+    {
+        $this->loadCss(array(
+            array(
+                'name' => 'all',
+                'path' => 'assets/fontawesome/css/'
             )
         ), true);
     }
