@@ -11,6 +11,7 @@ class Login extends MY_Controller
 
     public function index()
     {
+
         if (isset($this->data['user']->id)) {
 
             if ($this->session->userdata('user')) {
@@ -37,11 +38,10 @@ class Login extends MY_Controller
             if ($this->form_validation->run() === FALSE) {
                 $this->setError(validation_errors());
             } else {
-                $user = $this->user_model->get(
-                    array(
-                        'email' => $this->input->post('email')
-                    )
-                )->result();
+                $user = $this->user_model->get(array(
+                    'email' => $this->input->post('email')
+                ))->result();
+
 
                 if (count($user) === 0) {
                     $this->setError('E-mail não encontrado');
@@ -51,13 +51,13 @@ class Login extends MY_Controller
                         $this->setError($user->name . ', a sua senha está errada');
                     } else {
                         $this->session->set_userdata('user', $user);
-                        redirect($this->uri->segment(1));
+                        $this->goToPreviousUrl();
                     }
                 }
             }
         } else {
             $this->setError('Ocorreu um erro ao processar o formulario, tente novamente mais tarde');
         }
-        redirect($this->uri->segment(1) . '/' . $this->uri->segment(2));
+        redirect($this->uri->segment(1));
     }
 }

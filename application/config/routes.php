@@ -55,5 +55,6 @@ $route['lista'] = 'home/listing';
 $route['proximo'] = 'home/next';
 $route['proxima'] = 'home/next';
 $route['redirect/(:any)'] = 'home/redirect/$1';
+$route['relatorio'] = 'report/index';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

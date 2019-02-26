@@ -57,6 +57,12 @@ class  MY_Controller extends CI_Controller
 
         $this->data['user'] = $this->session->userdata('user') ? $this->session->userdata('user') : null;
 
+        if ($this->router->class != 'login' && isset($this->data['user']->id) === FALSE) {
+            $this->setError('É necessário estar logado');
+            $this->setPreviousUrl(base_url($this->uri->uri_string()));
+            redirect(base_url('login'), 'refresh');
+        }
+
 
         $this->content = file_exists(APPPATH . 'views/' . $this->template . '/' . $this->router->class . '/' . $this->router->method . '.php') ? $this->template . '/' . $this->router->class . '/' . $this->router->method : $this->template . '/default/content';
 
@@ -83,7 +89,11 @@ class  MY_Controller extends CI_Controller
     public function setError($str)
     {
         if (strlen($str) > 0) {
-            $this->session->set_flashdata('error', $this->session->flashdata('error') . '<p>' . $str . '</p>');
+            $error = '';
+            if($this->session->flashdata('error')) {
+                $error .= $this->session->flashdata('error') . '<br>';
+            }
+            $this->session->set_flashdata('error',  $error . $str);
         }
     }
 
@@ -96,9 +106,12 @@ class  MY_Controller extends CI_Controller
     public function setMsg($str)
     {
         if (strlen($str) > 0) {
-            $this->session->set_flashdata('msg', $this->session->flashdata('msg') . '<p>' . $str . '</p>');
+            $msg = '';
+            if($this->session->flashdata('msg')) {
+                $msg .= $this->session->flashdata('msg') . '<br>';
+            }
+            $this->session->set_flashdata('error',  $msg . $str);
         }
-
     }
 
     /**
@@ -108,20 +121,24 @@ class  MY_Controller extends CI_Controller
      */
     public function renderer()
     {
-        $this->loadCss(array(
-            'name' => 'main',
-            'path' => 'assets/css/'
-        ), true);
+        $this->loadCss(
+            array(
+                array(
+                    'name' => 'main',
+                ),
+                array(
+                    'name' => $this->router->class . '_' . $this->router->method,
+                )
+            )
+        );
 
         $this->loadJs(
             array(
                 array(
                     'name' => 'script',
-                    'path' => $this->uri->segment(1) == 'adm' ? 'assets/adm/js/' : null
                 ),
                 array(
                     'name' => $this->router->class . '_' . $this->router->method,
-                    'path' => $this->uri->segment(1) == 'adm' ? 'assets/adm/js/' : null
                 )
             )
         );

@@ -15,3 +15,17 @@
 <?php echo isset($js) ? $js : NULL; ?>
 </head>
 <body>
+<div class="container">
+    <?php if($error):?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Erro!</strong> <?= $error; ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php endif;?>
+    <nav class="nav nav-pills flex-column flex-sm-row">
+        <a class="flex-sm-fill text-sm-center nav-link home_index" href="#">Pendentes</a>
+        <a class="flex-sm-fill text-sm-center nav-link home_listing disabled" href="./lista">Lista</a>
+        <a class="flex-sm-fill text-sm-center nav-link report" href="./relatorio">Relatório</a>
+    </nav>

@@ -1,19 +1,16 @@
-<div class="container">
-    <h1>Interações realizadas</h1>
-    <p>Tempo de resposta no mês atual: <?= $thismonth->news_diff; ?> horas</p>
-    <div class="row">
-        <div class="col-sm">
-            <canvas id="todayXyesterday"></canvas>
-        </div>
-        <div class="col-sm">
-            <canvas id="thisWeekXlastWeek"></canvas>
-        </div>
-        <div class="col-sm">
-            <canvas id="thisMonthXlastMonth"></canvas>
-        </div>
+<h1>Interações realizadas</h1>
+<p>Tempo de resposta no mês atual: <?= $thismonth->news_diff; ?> horas</p>
+<div class="row">
+    <div class="col-sm">
+        <canvas id="todayXyesterday"></canvas>
+    </div>
+    <div class="col-sm">
+        <canvas id="thisWeekXlastWeek"></canvas>
+    </div>
+    <div class="col-sm">
+        <canvas id="thisMonthXlastMonth"></canvas>
     </div>
 </div>
-
 <script>
     new Chart(document.getElementById("todayXyesterday"), {
         "type": "bar",
