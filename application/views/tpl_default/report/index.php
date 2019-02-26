@@ -1,17 +1,3 @@
-<!doctype html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="assets/css/main.css?v=0.1">
-    <script src="assets/js/Chart.min.js"></script>
-    <script>
-    </script>
-    <title>Zenhack - list</title>
-</head>
-<body>
 <h1>Interações realizadas</h1>
 <p>Tempo de resposta no mês atual: <?= $thismonth->news_diff; ?> horas</p>
 <div class="charts">
@@ -105,5 +91,3 @@
         }
     });
 </script>
-</body>
-</html>

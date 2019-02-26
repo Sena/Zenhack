@@ -1,13 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Report extends CI_Controller {
+class Report extends MY_Controller {
 
     private $dealDate = '2019-02-01';
 
 	public function index()
 	{
 	    $this->load->model('scape_model');
+
+        $this->loadChart();
 
 	    $this_week_start = $this->find_monday()->format('Y-m-d 00:00:00');
 	    $last_week_start = $this->find_monday(null, 1)->format('Y-m-d 23:59:59');
@@ -141,8 +143,9 @@ class Report extends CI_Controller {
         }
 		
 		$this->data['thismonth']->news_diff = $this->calc_news_diff($this->data['thismonth']->dump);
-		
-		$this->load->view('report', $this->data);
+
+
+        parent::renderer();
 	}
 	
 	private function calc_news_diff($dump) 

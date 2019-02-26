@@ -1,21 +1,20 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Welcome extends CI_Controller {
+class Home extends MY_Controller {
 
 	public function index()
 	{
 		$this->data['post_unread'] = $this->get_zd(true);
 
-		$this->load->view('welcome_message', $this->data);
+		$this->renderer();
 	}
 
 	public function listing()
 	{
 		$this->data['post_unread'] = $this->get_zd(true);
 
-		$this->load->view('list', $this->data);
-
+        $this->renderer();
 	}
 
 	public function next()

@@ -1,9 +1,9 @@
 <?php
-class Test extends CI_Controller
-{
-        public function index()
-        {
-            $this->load->view('test');
-        }
 
+class Test extends MY_Controller
+{
+    public function index()
+    {
+        $this->renderer();
+    }
 }

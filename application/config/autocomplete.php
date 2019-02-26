@@ -90,6 +90,7 @@
  * @property People $People
  *
  * @property Products $Products
+ * @property Scape_model $scape_model
  *
  */
 class CI_Controller
