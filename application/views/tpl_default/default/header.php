@@ -35,7 +35,7 @@
     <?php if(isset($user->id)):?>
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link home_index" href="./" target="_blank">Home</a>
+            <a class="nav-link home_index" href="./">Home</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="./proximo" target="_blank">Próximo</a>

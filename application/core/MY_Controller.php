@@ -45,6 +45,7 @@ class  MY_Controller extends CI_Controller
      */
     public function debug($value = null)
     {
+        echo '<pre>';
         print_r($value);
         exit();
     }
@@ -53,21 +54,29 @@ class  MY_Controller extends CI_Controller
     {
         parent::__construct();
 
+        $this->checkUser();
+
         $this->loadBootstrap();
-
-        $this->data['user'] = $this->session->userdata('user') ? $this->session->userdata('user') : null;
-
-        if ($this->router->class != 'login' && isset($this->data['user']->id) === FALSE) {
-            $this->setError('É necessário estar logado');
-            $this->setPreviousUrl(base_url($this->uri->uri_string()));
-            redirect(base_url('login'), 'refresh');
-        }
-
 
         $this->content = file_exists(APPPATH . 'views/' . $this->template . '/' . $this->router->class . '/' . $this->router->method . '.php') ? $this->template . '/' . $this->router->class . '/' . $this->router->method : $this->template . '/default/content';
 
         $this->data['error'] = $this->session->flashdata('error') ? $this->session->flashdata('error') : null;
         $this->data['msg'] = $this->session->flashdata('msg') ? $this->session->flashdata('msg') : null;
+
+    }
+
+    private function checkUser()
+    {
+        $this->data['user'] = $this->session->userdata('user') ? $this->session->userdata('user') : null;
+
+        if ($this->router->class != 'login' && isset($this->data['user']->id) === FALSE) {
+            $this->setError('É necessário estar logado');
+            $this->setPreviousUrl(base_url($this->uri->uri_string()));
+            redirect(base_url('login'));
+        }elseif ($this->router->class != 'user' && isset($this->data['user']->forcechange) && $this->data['user']->forcechange) {
+            $this->setError('Você precisa alterar a sua senha');
+            redirect('usuario/editar/' . $this->data['user']->id);
+        }
     }
 
     /**
@@ -90,10 +99,10 @@ class  MY_Controller extends CI_Controller
     {
         if (strlen($str) > 0) {
             $error = '';
-            if($this->session->flashdata('error')) {
+            if ($this->session->flashdata('error')) {
                 $error .= $this->session->flashdata('error') . '<br>';
             }
-            $this->session->set_flashdata('error',  $error . $str);
+            $this->session->set_flashdata('error', $error . $str);
         }
     }
 
@@ -107,10 +116,10 @@ class  MY_Controller extends CI_Controller
     {
         if (strlen($str) > 0) {
             $msg = '';
-            if($this->session->flashdata('msg')) {
+            if ($this->session->flashdata('msg')) {
                 $msg .= $this->session->flashdata('msg') . '<br>';
             }
-            $this->session->set_flashdata('msg',  $msg . $str);
+            $this->session->set_flashdata('msg', $msg . $str);
         }
     }
 
