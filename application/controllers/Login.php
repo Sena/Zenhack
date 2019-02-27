@@ -51,7 +51,7 @@ class Login extends MY_Controller
                         $this->setError($user->name . ', a sua senha está errada');
                     } else {
                         $this->session->set_userdata('user', $user);
-                        $this->goToPreviousUrl();
+                        $this->goToPreviousUrl($this->uri->uri_string());
                     }
                 }
             }

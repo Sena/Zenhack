@@ -198,17 +198,20 @@ class  MY_Controller extends CI_Controller
      * Redirect the user, to previous URL
      *
      * @access  public
+     * @param bool $scape
      */
-    public function goToPreviousUrl()
+    public function goToPreviousUrl($scape = false)
     {
         $previousUrl = $this->session->userdata('previousUrl') ? $this->session->userdata('previousUrl') : array();
 
         if (is_array($previousUrl) && count($previousUrl) > 0) {
             $previous = array_pop($previousUrl);
             $this->session->set_userdata('previousUrl', $previousUrl);
-            redirect($previous, 'refresh');
+
+            redirect(strpos($previous, $scape) === false ? $previous : null);
+
         } else {
-            return FALSE;
+            redirect();
         }
     }
 
