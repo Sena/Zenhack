@@ -51,13 +51,12 @@ class Scratch extends MY_Controller {
 		}
 
 		$this->load->library('zenhack', array(
-			'subdomain' => 'pagsegurodev',
+			'subdomain' => $this->data['setting']['subdomain']->value,
 			'log' => $this->input->get('log') == '0' ? false : true,
 			'use_db' => $this->input->get('use_db') == '0' ? false : true, 
 		));
 
 		$this->zenhack->set_datetime_limit(date('Y-m-d H:i:s', strtotime("-7 days")));
-		$this->zenhack->set_datetime_limit('2019-01-02T18:59:00');
 		
 
 		//you may set the user that should write the last comments

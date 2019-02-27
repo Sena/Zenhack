@@ -56,5 +56,8 @@
         <li class="nav-item">
             <a class="nav-link report_index" href="./relatorio">Relatório</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link setting_index" href="./configuracao">Configurações</a>
+        </li>
     </ul>
     <?php endif;?>

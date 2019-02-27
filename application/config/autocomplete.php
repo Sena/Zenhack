@@ -89,7 +89,7 @@
  *
  * @property People $People
  *
- * @property Products $Products
+ * @property Setting_model $setting_model
  * @property Scape_model $scape_model
  * @property User_model $user_model
  *

@@ -55,6 +55,7 @@ class  MY_Controller extends CI_Controller
         parent::__construct();
 
         $this->checkUser();
+        $this->getSetting();
 
         $this->loadBootstrap();
 
@@ -76,6 +77,27 @@ class  MY_Controller extends CI_Controller
         }elseif ($this->router->class != 'user' && isset($this->data['user']->forcechange) && $this->data['user']->forcechange) {
             $this->setError('Você precisa alterar a sua senha');
             redirect('usuario/editar/' . $this->data['user']->id);
+        }
+    }
+
+    protected function getSetting()
+    {
+        $this->load->model('setting_model');
+
+        $setting = $this->setting_model->get()->result();
+
+        $this->data['setting'] = array();
+
+        foreach ($setting as $row) {
+            $this->data['setting'][$row->key] = $row;
+        }
+        if ($this->router->class != 'setting') {
+            foreach ($this->data['setting'] as $row) {
+                if($row->required && !$row->value) {
+                    $this->setError('É necessário inserir informações obrigatórias antes de prosseguir');
+                    redirect(base_url('configuracao'));
+                }
+            }
         }
     }
 

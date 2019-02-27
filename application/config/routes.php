@@ -65,3 +65,9 @@ $route['usuario/novo'] = 'user/edit';
 $route['usuario/editar/(:num)'] = 'user/edit/$1';
 $route['usuario/excluir/(:num)'] = 'user/delete/$1';
 $route['usuario/salvar/?(:num)?'] = 'user/save/$1';
+
+$route['configuracao'] = 'setting/index';
+$route['configuracao/novo'] = 'setting/edit';
+$route['configuracao/editar/(:num)'] = 'setting/edit/$1';
+$route['configuracao/excluir/(:num)'] = 'setting/delete/$1';
+$route['configuracao/salvar/?(:num)?'] = 'setting/save/$1';
