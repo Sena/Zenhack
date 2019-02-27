@@ -74,14 +74,19 @@ class  MY_Controller extends CI_Controller
             $this->setError('É necessário estar logado');
             $this->setPreviousUrl(base_url($this->uri->uri_string()));
             redirect(base_url('login'));
-        }elseif ($this->router->class != 'user' && isset($this->data['user']->forcechange) && $this->data['user']->forcechange) {
+
+        } elseif ($this->router->class != 'user' && isset($this->data['user']->forcechange) && $this->data['user']->forcechange) {
             $this->setError('Você precisa alterar a sua senha');
             redirect('usuario/editar/' . $this->data['user']->id);
         }
+
     }
 
     protected function getSetting()
     {
+        if(isset($this->data['user']->id) === FALSE) {
+            return false;
+        }
         $this->load->model('setting_model');
 
         $setting = $this->setting_model->get()->result();
@@ -93,7 +98,7 @@ class  MY_Controller extends CI_Controller
         }
         if ($this->router->class != 'setting') {
             foreach ($this->data['setting'] as $row) {
-                if($row->required && !$row->value) {
+                if ($row->required && !$row->value) {
                     $this->setError('É necessário inserir informações obrigatórias antes de prosseguir');
                     redirect(base_url('configuracao'));
                 }
