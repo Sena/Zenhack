@@ -57,7 +57,9 @@ class User extends MY_Controller
                 );
                 if ($this->input->post('password')) {
                     $data['password'] = md5($this->input->post('password'));
-                    $data['forcechange'] = 0;
+                    if($id = $this->data['user']->id) {
+                        $data['forcechange'] = 0;
+                    }
                 }
                 if ($id === 0) {
                     $id = $this->user_model->insert($data, true);
