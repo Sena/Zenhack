@@ -54,8 +54,7 @@ class  MY_Controller extends CI_Controller
     {
         parent::__construct();
 
-        $this->checkUser();
-        $this->getSetting();
+        $this->loadRequiredInfor();
 
         $this->loadBootstrap();
 
@@ -66,8 +65,9 @@ class  MY_Controller extends CI_Controller
 
     }
 
-    private function checkUser()
+    private function loadRequiredInfor()
     {
+
         $this->data['user'] = $this->session->userdata('user') ? $this->session->userdata('user') : null;
 
         if ($this->router->class != 'login' && isset($this->data['user']->id) === FALSE) {
@@ -78,29 +78,23 @@ class  MY_Controller extends CI_Controller
         } elseif ($this->router->class != 'user' && isset($this->data['user']->forcechange) && $this->data['user']->forcechange) {
             $this->setError('Você precisa alterar a sua senha');
             redirect('usuario/editar/' . $this->data['user']->id);
-        }
+        } elseif (isset($this->data['user']->id) === true && $this->data['user']->forcechange === 0) {
 
-    }
+            $this->load->model('setting_model');
 
-    protected function getSetting()
-    {
-        if(isset($this->data['user']->id) === FALSE) {
-            return false;
-        }
-        $this->load->model('setting_model');
+            $setting = $this->setting_model->get()->result();
 
-        $setting = $this->setting_model->get()->result();
+            $this->data['setting'] = array();
 
-        $this->data['setting'] = array();
-
-        foreach ($setting as $row) {
-            $this->data['setting'][$row->key] = $row;
-        }
-        if ($this->router->class != 'setting') {
-            foreach ($this->data['setting'] as $row) {
-                if ($row->required && !$row->value) {
-                    $this->setError('É necessário inserir informações obrigatórias antes de prosseguir');
-                    redirect(base_url('configuracao'));
+            foreach ($setting as $row) {
+                $this->data['setting'][$row->key] = $row;
+            }
+            if ($this->router->class != 'setting') {
+                foreach ($this->data['setting'] as $row) {
+                    if ($row->required && !$row->value) {
+                        $this->setError('É necessário inserir informações obrigatórias antes de prosseguir');
+                        redirect(base_url('configuracao'));
+                    }
                 }
             }
         }
