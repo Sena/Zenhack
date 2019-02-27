@@ -57,7 +57,7 @@ class User extends MY_Controller
                 );
                 if ($this->input->post('password')) {
                     $data['password'] = md5($this->input->post('password'));
-                    if($id = $this->data['user']->id) {
+                    if($id == $this->data['user']->id) {
                         $data['forcechange'] = 0;
                     }
                 }
@@ -69,7 +69,7 @@ class User extends MY_Controller
                 if ($id === 0) {
                     $this->setError('Erro ao tentar gravar no banco de dados.');
                 } else {
-                    if($id = $this->data['user']->id) {
+                    if($id == $this->data['user']->id) {
                         $this->session->set_userdata('user', (object)array_merge((array)$this->data['user'], $data));
                     }
                     $this->setMsg('Registro salvo com sucesso.');
