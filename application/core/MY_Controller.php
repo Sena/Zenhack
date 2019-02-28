@@ -67,19 +67,16 @@ class  MY_Controller extends CI_Controller
 
     private function loadRequiredInfor()
     {
-
         $this->data['user'] = $this->session->userdata('user') ? $this->session->userdata('user') : null;
 
         if ($this->router->class != 'login' && isset($this->data['user']->id) === FALSE) {
             $this->setError('É necessário estar logado');
             $this->setPreviousUrl(base_url($this->uri->uri_string()));
             redirect(base_url('login'));
-
         } elseif ($this->router->class != 'user' && isset($this->data['user']->forcechange) && $this->data['user']->forcechange) {
             $this->setError('Você precisa alterar a sua senha');
             redirect('usuario/editar/' . $this->data['user']->id);
-        } elseif (isset($this->data['user']->id) === true && $this->data['user']->forcechange === 0) {
-
+        } elseif (isset($this->data['user']->id) === true && $this->data['user']->forcechange == 0) {
             $this->load->model('setting_model');
 
             $setting = $this->setting_model->get()->result();
