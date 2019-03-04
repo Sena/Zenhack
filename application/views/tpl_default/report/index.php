@@ -11,6 +11,26 @@
         <canvas id="thisMonthXlastMonth"></canvas>
     </div>
 </div>
+<h2>SLA</h2>
+<div class="row">
+    <div class="col-sm">
+        <h3>Crítico <small>(<?= $setting['slabad']->value; ?> horas)</small></h3>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger"
+                 style="width:<?= $slascore->slabad; ?>%"></div>
+        </div>
+        <h3>Regular <small>(<?= $setting['slareegular']->value; ?> horas)</small></h3>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info"
+                 style="width:<?= $slascore->slareegular; ?>%"></div>
+        </div>
+        <h3>Meta <small>(<?= $setting['slagoal']->value; ?> horas)</small></h3>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                 style="width:<?= $slascore->slagoal; ?>%"></div>
+        </div>
+    </div>
+</div>
 <script>
     new Chart(document.getElementById("todayXyesterday"), {
         "type": "bar",

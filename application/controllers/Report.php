@@ -148,11 +148,24 @@ class Report extends MY_Controller {
 		
 		$this->data['thismonth']->news_diff = $this->calc_news_diff($this->data['thismonth']->dump);
 
+        $this->calc_sla();
+
 
         parent::renderer();
 	}
+
+	private function calc_sla()
+    {
+        $sla = new stdClass();
+
+        $news_diff = $this->data['thismonth']->news_diff + 0.0000000000000000000000000000000000001;
+        $sla->slabad = $this->data['setting']['slabad']->value * 100 / $news_diff;
+        $sla->slagoal = $this->data['setting']['slagoal']->value * 100 / $news_diff;
+        $sla->slareegular = $this->data['setting']['slareegular']->value * 100 / $news_diff;
+        $this->data['slascore'] = $sla;
+    }
 	
-	private function calc_news_diff($dump) 
+	private function calc_news_diff($dump)
 	{
 	    $count = 0;
 	    $total = 0;
