@@ -7,6 +7,8 @@ class Report extends MY_Controller {
 
 	public function index()
 	{
+        $this->checkPermission();
+
         if($this->data['setting']['sladealdate']->value) {
             $this->dealDate = $this->data['setting']['sladealdate']->value;
         }

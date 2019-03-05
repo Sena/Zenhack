@@ -5,6 +5,8 @@ class Scratch extends MY_Controller {
 
 	public function index()
 	{
+        $this->checkPermission();
+
 		$this->data['post_unread'] = $this->get_zd(true);
 
 		$this->renderer();
@@ -12,6 +14,8 @@ class Scratch extends MY_Controller {
 
 	public function listing()
 	{
+        $this->checkPermission();
+
 		$this->data['post_unread'] = $this->get_zd(true);
 
         $this->renderer();
@@ -19,6 +23,8 @@ class Scratch extends MY_Controller {
 
 	public function next()
 	{
+        $this->checkPermission();
+
 		$this->data['post_unread'] = $this->get_zd();
 
 		$this->redirect(end($this->data['post_unread'])->hash);exit;
@@ -103,6 +109,7 @@ class Scratch extends MY_Controller {
 
 	public function redirect($hash)
 	{
+        $this->checkPermission($this->router->class . '/next');
 		$post_unread = $this->get_zd();
 		if(isset($post_unread[$hash])) {
 			$this->scape_post($post_unread[$hash]);

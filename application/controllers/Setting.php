@@ -8,18 +8,18 @@ class Setting extends MY_Controller
     {
         parent::__construct();
 
+        $this->checkPermission();
+
         $this->load->model('setting_model');
     }
 
     public function index($id = NULL)
     {
-
         parent::renderer();
     }
 
     public function save()
     {
-        
         if ($this->input->post()) {
 
             $post = $this->input->post();

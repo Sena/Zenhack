@@ -10,4 +10,5 @@ Essa ferramenta tem o propósito de listar todos posts não respondido por um gr
 - Insira os dados de banco de dados em `/application/config/database.php`;
 - Insira a URL da sua aplicação na variável `$config['base_url']` dentro do arquivo `/application/config/config.php`;
 - Insira o subdominio do seu fórum na linha 55 do arquivo `/application/controllers/Welcome.php`;
-- Acesse na URL a página `migrate` para a criação das tabelas no banco de dados. 
+- Acesse na URL a página `/migrate` para a criação das tabelas no banco de dados.
+- Agora só entrar na página inicial usando o usuário admin@admin.com com a senha admin

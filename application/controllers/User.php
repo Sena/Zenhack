@@ -13,6 +13,7 @@ class User extends MY_Controller
 
     public function index()
     {
+        $this->checkPermission();
         $this->loadFontawesome();
         $this->data['list'] = $this->user_model->get()->result();
 
@@ -21,6 +22,7 @@ class User extends MY_Controller
 
     public function edit($id = NULL)
     {
+        $this->checkPermission();
         if ($this->uri->segment(3) == 'editar' && (int)$id === 0) {
             redirect($this->uri->segment(1) . '/novo');
         } elseif ($id > 0) {
@@ -36,6 +38,7 @@ class User extends MY_Controller
 
     public function save($id = NULL)
     {
+        $this->checkPermission($this->router->class . '/edit');
         $id = (int)$id;
         if ($this->input->post()) {
             $this->load->library('form_validation');
@@ -57,7 +60,7 @@ class User extends MY_Controller
                 );
                 if ($this->input->post('password')) {
                     $data['password'] = md5($this->input->post('password'));
-                    if($id == $this->data['user']->id) {
+                    if($id == $this->data['me']->id) {
                         $data['forcechange'] = 0;
                     }
                 }
@@ -69,8 +72,8 @@ class User extends MY_Controller
                 if ($id === 0) {
                     $this->setError('Erro ao tentar gravar no banco de dados.');
                 } else {
-                    if($id == $this->data['user']->id) {
-                        $this->session->set_userdata('user', (object)array_merge((array)$this->data['user'], $data));
+                    if($id == $this->data['me']->id) {
+                        $this->session->set_userdata('me', (object)array_merge((array)$this->data['me'], $data));
                     }
                     $this->setMsg('Registro salvo com sucesso.');
                 }
@@ -83,6 +86,7 @@ class User extends MY_Controller
 
     public function delete($id)
     {
+        $this->checkPermission();
         $this->user_model->delete(array('id' => $id));
         $this->setMsg('Registro removido com sucesso.');
         redirect($this->uri->segment(1));

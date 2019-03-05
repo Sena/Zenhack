@@ -67,34 +67,70 @@ class  MY_Controller extends CI_Controller
 
     private function loadRequiredInfor()
     {
-        $this->data['user'] = $this->session->userdata('user') ? $this->session->userdata('user') : null;
+        $this->data['me'] = $this->session->userdata('me') ? $this->session->userdata('me') : null;
 
-        if ($this->router->class != 'login' && isset($this->data['user']->id) === FALSE) {
+        if ($this->router->class != 'login' && isset($this->data['me']->id) === FALSE) {
             $this->setError('É necessário estar logado');
             $this->setPreviousUrl(base_url($this->uri->uri_string()));
             redirect(base_url('login'));
-        } elseif ($this->router->class != 'user' && isset($this->data['user']->forcechange) && $this->data['user']->forcechange) {
-            $this->setError('Você precisa alterar a sua senha');
-            redirect('usuario/editar/' . $this->data['user']->id);
-        } elseif (isset($this->data['user']->id) === true && $this->data['user']->forcechange == 0) {
-            $this->load->model('setting_model');
+        } elseif(isset($this->data['me']->id)) {
 
-            $setting = $this->setting_model->get()->result();
+            $this->data['me']->permission = $this->getUserPermission($this->data['me']->id);
 
-            $this->data['setting'] = array();
+            if ($this->router->class != 'user' && isset($this->data['me']->forcechange) && $this->data['me']->forcechange) {
+                $this->setError('Você precisa alterar a sua senha');
+                redirect('usuario/editar/' . $this->data['me']->id);
+            } elseif (isset($this->data['me']->id) === true && $this->data['me']->forcechange == 0) {
+                $this->load->model('setting_model');
 
-            foreach ($setting as $row) {
-                $this->data['setting'][$row->key] = $row;
-            }
-            if ($this->router->class != 'setting') {
-                foreach ($this->data['setting'] as $row) {
-                    if ($row->required && !$row->value) {
-                        $this->setError('É necessário inserir informações obrigatórias antes de prosseguir');
-                        redirect(base_url('configuracao'));
+                $setting = $this->setting_model->get()->result();
+
+                $this->data['setting'] = array();
+
+                foreach ($setting as $row) {
+                    $this->data['setting'][$row->key] = $row;
+                }
+                if ($this->router->class != 'setting') {
+                    foreach ($this->data['setting'] as $row) {
+                        if ($row->required && !$row->value) {
+                            $this->setError('É necessário inserir informações obrigatórias antes de prosseguir');
+                            redirect(base_url('configuracao'));
+                        }
                     }
                 }
             }
+
         }
+    }
+
+    protected function checkPermission($route = null)
+    {
+        $found = false;
+        if ($route === null) {
+            $route = $this->router->class . '/' . $this->router->method;
+        }
+        foreach ($this->data['me']->permission as $permission) {
+            if ($permission->route == $route) {
+                $found = true;
+                break;
+            }
+        }
+        if ($found === false) {
+            $this->setError('Permissão negada!');
+            redirect();
+        }
+    }
+
+    protected function getUserPermission($user_id)
+    {
+        $this->load->model('userpermission_model');
+        $permissionDb = $this->userpermission_model->get(array('user_id' => $user_id))->result();
+
+        $permission = array();
+        foreach ($permissionDb as $row) {
+            $permission[$row->id] = $row;
+        }
+        return $permission;
     }
 
     /**

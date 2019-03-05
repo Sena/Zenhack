@@ -51,10 +51,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'home/index';
 $route['pendente'] = 'scratch/index';
-$route['next'] = 'scratch/next';
 $route['lista'] = 'scratch/listing';
 $route['proximo'] = 'scratch/next';
-$route['proxima'] = 'scratch/next';
 $route['redirect/(:any)'] = 'home/redirect/$1';
 $route['relatorio'] = 'report/index';
 $route['404_override'] = '';
@@ -67,7 +65,7 @@ $route['usuario/excluir/(:num)'] = 'user/delete/$1';
 $route['usuario/salvar/?(:num)?'] = 'user/save/$1';
 
 $route['configuracao'] = 'setting/index';
-$route['configuracao/novo'] = 'setting/edit';
-$route['configuracao/editar/(:num)'] = 'setting/edit/$1';
-$route['configuracao/excluir/(:num)'] = 'setting/delete/$1';
 $route['configuracao/salvar/?(:num)?'] = 'setting/save/$1';
+
+$route['usuario/permissao/(:num)?'] = 'permission/edit/$1';
+$route['usuario/permissao/salvar/(:num)?'] = 'permission/save/$1';

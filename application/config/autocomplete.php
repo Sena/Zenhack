@@ -92,6 +92,8 @@
  * @property Setting_model $setting_model
  * @property Scape_model $scape_model
  * @property User_model $user_model
+ * @property Userpermission_model $userpermission_model
+ * @property Permission_model $permission_model
  *
  */
 class CI_Controller

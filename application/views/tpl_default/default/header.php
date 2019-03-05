@@ -32,7 +32,7 @@
             </button>
         </div>
     <?php endif;?>
-    <?php if(isset($user->id)):?>
+    <?php if(isset($me->id)):?>
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link home_index" href="./">Home</a>
