@@ -41,9 +41,24 @@ class User extends MY_Controller
         $this->checkPermission($this->router->class . '/edit');
         $id = (int)$id;
         if ($this->input->post()) {
+
+            $emailValidation = '|is_unique[user.email]';
+
+            if ($id > 0) {
+                $user = $this->getUser($id);
+                if ($user) {
+                    if($user->email == $this->input->post('email')) {
+                        $emailValidation = '';
+                    }
+                } else {
+                    $this->setError('Falha ao encontrar o usuário');
+                    redirect($this->uri->segment(1));
+                }
+            }
+
             $this->load->library('form_validation');
             $this->form_validation->set_rules('name', 'Nome', 'trim|required|min_length[3]');
-            $this->form_validation->set_rules('email', 'E-mail', 'trim|required|min_length[3]');
+            $this->form_validation->set_rules('email', 'E-mail', 'trim|required|min_length[3]|valid_email' . $emailValidation);
 
             if ($this->form_validation->run() === FALSE) {
                 $this->setError(validation_errors());
@@ -60,7 +75,7 @@ class User extends MY_Controller
                 );
                 if ($this->input->post('password')) {
                     $data['password'] = md5($this->input->post('password'));
-                    if($id == $this->data['me']->id) {
+                    if ($id == $this->data['me']->id) {
                         $data['forcechange'] = 0;
                     }
                 }
@@ -72,7 +87,7 @@ class User extends MY_Controller
                 if ($id === 0) {
                     $this->setError('Erro ao tentar gravar no banco de dados.');
                 } else {
-                    if($id == $this->data['me']->id) {
+                    if ($id == $this->data['me']->id) {
                         $this->session->set_userdata('me', (object)array_merge((array)$this->data['me'], $data));
                     }
                     $this->setMsg('Registro salvo com sucesso.');
@@ -88,15 +103,21 @@ class User extends MY_Controller
     {
         $this->checkPermission();
 
-        if($this->user_model->get()->num_rows() > 1) {
+        if ($this->user_model->get()->num_rows() > 1) {
             $this->load->model('userpermission_model');
 
             $this->user_model->delete(array('id' => $id));
             $this->userpermission_model->delete(array('user_id' => $id));
             $this->setMsg('Registro removido com sucesso.');
-        }else{
+        } else {
             $this->setError('Não é possivel remover o único usuário do sistema');
         }
         redirect($this->uri->segment(1));
+    }
+
+    private function getUser($id)
+    {
+        $user = $this->user_model->get(array('id' => $id))->result();
+        return current($user);
     }
 }
