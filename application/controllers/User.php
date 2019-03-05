@@ -87,8 +87,16 @@ class User extends MY_Controller
     public function delete($id)
     {
         $this->checkPermission();
-        $this->user_model->delete(array('id' => $id));
-        $this->setMsg('Registro removido com sucesso.');
+
+        if($this->user_model->get()->num_rows() > 1) {
+            $this->load->model('userpermission_model');
+
+            $this->user_model->delete(array('id' => $id));
+            $this->userpermission_model->delete(array('user_id' => $id));
+            $this->setMsg('Registro removido com sucesso.');
+        }else{
+            $this->setError('Não é possivel remover o único usuário do sistema');
+        }
         redirect($this->uri->segment(1));
     }
 }
