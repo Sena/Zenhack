@@ -10,6 +10,7 @@
     <base href="<?php echo base_url(); ?>">
     <meta name="controller" content="<?php echo $this->router->class ?>"/>
     <meta name="method" content="<?php echo $this->router->method ?>"/>
+    <script>var permission = <?= json_encode((isset($me->permission) ? $me->permission : '')); ?></script>
 <?php echo isset($assets) ? $assets : NULL; ?>
 <?php echo isset($css) ? $css : NULL; ?>
 <?php echo isset($js) ? $js : NULL; ?>
@@ -38,26 +39,26 @@
             <a class="nav-link home_index" href="./">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="./proximo" target="_blank">Próximo</a>
+            <a class="nav-link scratch_next disabled" href="./proximo" target="_blank">Próximo</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link scratch_index" href="./pendente">Pendentes</a>
+            <a class="nav-link scratch_index disabled" href="./pendente">Pendentes</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link home_listing disabled" href="./lista">Lista</a>
+            <a class="nav-link scratch_listing disabled" href="./lista">Lista</a>
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle user" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" href="./usuario">Usuários</a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="usuario">Lista</a>
-                <a class="dropdown-item" href="usuario/novo">Novo</a>
+                <a class="dropdown-item user_index disabled" href="usuario">Lista</a>
+                <a class="dropdown-item user_edit disabled" href="usuario/novo">Novo</a>
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link report_index" href="./relatorio">Relatório</a>
+            <a class="nav-link report_index disabled" href="./relatorio">Relatório</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link setting_index" href="./configuracao">Configurações</a>
+            <a class="nav-link setting_index disabled" href="./configuracao">Configurações</a>
         </li>
     </ul>
     <?php endif;?>
