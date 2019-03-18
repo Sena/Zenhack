@@ -22,7 +22,10 @@ class User extends MY_Controller
 
     public function edit($id = NULL)
     {
-        $this->checkPermission();
+        if($id != $this->data['me']->id) {
+            $this->checkPermission();
+        }
+
         if ($this->uri->segment(3) == 'editar' && (int)$id === 0) {
             redirect($this->uri->segment(1) . '/novo');
         } elseif ($id > 0) {
@@ -38,7 +41,9 @@ class User extends MY_Controller
 
     public function save($id = NULL)
     {
-        $this->checkPermission($this->router->class . '/edit');
+        if($id != $this->data['me']->id) {
+            $this->checkPermission($this->router->class . '/edit');
+        }
         $id = (int)$id;
         if ($this->input->post()) {
 

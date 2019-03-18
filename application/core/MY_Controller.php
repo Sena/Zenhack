@@ -58,11 +58,24 @@ class  MY_Controller extends CI_Controller
 
         $this->loadBootstrap();
 
+        if (isset($this->data['me']->id) !== FALSE) {
+            $this->useraccess();
+        }
+
         $this->content = file_exists(APPPATH . 'views/' . $this->template . '/' . $this->router->class . '/' . $this->router->method . '.php') ? $this->template . '/' . $this->router->class . '/' . $this->router->method : $this->template . '/default/content';
 
         $this->data['error'] = $this->session->flashdata('error') ? $this->session->flashdata('error') : null;
         $this->data['msg'] = $this->session->flashdata('msg') ? $this->session->flashdata('msg') : null;
 
+    }
+
+    private function useraccess()
+    {
+        $this->load->model('useraccess_model');
+        $this->useraccess_model->insert(array(
+            'user_id' => $this->data['me']->id,
+            'uri' => current_url(),
+        ));
     }
 
     private function loadRequiredInfor()
@@ -72,6 +85,7 @@ class  MY_Controller extends CI_Controller
         if ($this->router->class != 'login' && isset($this->data['me']->id) === FALSE) {
             $this->setError('É necessário estar logado');
             $this->setPreviousUrl(base_url($this->uri->uri_string()));
+            log_message('debug', 'Redirect action: User not logged');
             redirect(base_url('login'));
         } elseif(isset($this->data['me']->id)) {
 
@@ -79,6 +93,7 @@ class  MY_Controller extends CI_Controller
 
             if ($this->router->class != 'user' && isset($this->data['me']->forcechange) && $this->data['me']->forcechange) {
                 $this->setError('Você precisa alterar a sua senha');
+                log_message('debug', 'Redirect action: User need change password');
                 redirect('usuario/editar/' . $this->data['me']->id);
             } elseif (isset($this->data['me']->id) === true && $this->data['me']->forcechange == 0) {
                 $this->load->model('setting_model');
@@ -94,6 +109,7 @@ class  MY_Controller extends CI_Controller
                     foreach ($this->data['setting'] as $row) {
                         if ($row->required && !$row->value) {
                             $this->setError('É necessário inserir informações obrigatórias antes de prosseguir');
+                            log_message('debug', 'Redirect action: Need config the platform');
                             redirect(base_url('configuracao'));
                         }
                     }

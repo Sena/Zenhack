@@ -94,6 +94,7 @@
  * @property User_model $user_model
  * @property Userpermission_model $userpermission_model
  * @property Permission_model $permission_model
+ * @property Useraccess_model $useraccess_model
  *
  */
 class CI_Controller
