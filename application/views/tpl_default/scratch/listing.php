@@ -13,7 +13,7 @@ Total: <?=count($post_unread);?>
         <?php foreach ($post_unread as $row):?>
             <tr title="<?=strip_tags($row->details);?>" alt="<?=strip_tags($row->details);?>">
                 <td>
-                    <a href="<?=$row->html_url;?>" target="_blank">
+                    <a href="./redirect/<?=$row->hash;?>" target="_blank">
                         <?=$row->title;?>
                     </a>
                 </td>
