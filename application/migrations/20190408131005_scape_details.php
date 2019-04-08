@@ -29,15 +29,11 @@ class Migration_Scape_details extends CI_Migration {
         $this->db->insert_batch('permission', array(
             array(
                 'route' => 'scape/index',
-                'label' => 'Post - Lista',
-            ),
-            array(
-                'route' => 'scape/view',
-                'label' => 'Post - Detalhe',
+                'label' => 'Postagem - Lista',
             ),
             array(
                 'route' => 'scape/delete',
-                'label' => 'Post - excluir',
+                'label' => 'Postagem - excluir',
             ),
         ));
 
@@ -52,10 +48,6 @@ class Migration_Scape_details extends CI_Migration {
 
         $this->db->delete('permission', array(
             'route' => 'scape/index',
-        ));
-
-        $this->db->delete('permission', array(
-            'route' => 'scape/view',
         ));
 
         $this->db->delete('permission', array(
