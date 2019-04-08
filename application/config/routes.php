@@ -64,6 +64,9 @@ $route['usuario/editar/(:num)'] = 'user/edit/$1';
 $route['usuario/excluir/(:num)'] = 'user/delete/$1';
 $route['usuario/salvar/?(:num)?'] = 'user/save/$1';
 
+$route['postagem'] = 'scape/index';
+$route['postagem/excluir/(:num)'] = 'scape/delete/$1';
+
 $route['configuracao'] = 'setting/index';
 $route['configuracao/salvar/?(:num)?'] = 'setting/save/$1';
 

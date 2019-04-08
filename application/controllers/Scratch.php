@@ -122,9 +122,15 @@ class Scratch extends MY_Controller {
 	{
 		$this->load->model('scape_model');
 
+		$last_comment = current($post->comments);
+
 		$this->scape_model->insert(array(
 			'user_id' => $this->data['me']->id,
 			'hash' => $post->hash,
+			'html_url' => $post->html_url,
+			'title' => $post->title,
+			'details' => $post->details,
+			'last_comment' => $last_comment->body,
 			'dump' => base64_encode(serialize($post)),
 		));
 	}

@@ -45,6 +45,9 @@
             <a class="nav-link scratch_index disabled" href="./pendente">Pendentes</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link scape_index scape_view disabled" href="./postagem">Respondido</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link scratch_listing disabled" href="./lista">Lista</a>
         </li>
         <li class="nav-item dropdown">
