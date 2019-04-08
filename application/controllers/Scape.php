@@ -17,7 +17,9 @@ class Scape extends MY_Controller
         $this->loadFontawesome();
         $this->getUser();
 
-        $this->data['list'] = $this->scape_model->get()->result();
+        $this->data['list'] = $this->scape_model->get(array(
+            'date >=' => strtotime("-7 days")
+        ))->result();
 
         parent::renderer();
     }

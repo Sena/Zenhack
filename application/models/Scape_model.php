@@ -5,4 +5,10 @@ class Scape_model extends MY_Model
     {
         parent::__construct();
     }
+
+    public function get(array $where = array(), $limit = null)
+    {
+        $this->db->order_by('date', 'DESC');
+        return parent::get($where, $limit);
+    }
 }
