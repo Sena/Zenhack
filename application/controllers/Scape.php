@@ -21,16 +21,13 @@ class Scape extends MY_Controller
             'date >=' => date('Y-m-d', strtotime("-7 days"))
         ))->result();
 
+        foreach ($this->data['list'] as $key => $row) {
+            if ($row->html_url == null) {
+                unset($this->data['list'][$key]);
+            }
+        }
+
         parent::renderer();
-    }
-
-    public function delete($id)
-    {
-        $this->checkPermission();
-
-        $this->scape_model->delete(array('id' => $id));
-        $this->setMsg('Registro removido com sucesso.');
-        redirect($this->uri->segment(1));
     }
 
     private function getUser()
@@ -41,5 +38,14 @@ class Scape extends MY_Controller
         foreach ($user as $row) {
             $this->data['user'][$row->id] = $row;
         }
+    }
+
+    public function delete($id)
+    {
+        $this->checkPermission();
+
+        $this->scape_model->delete(array('id' => $id));
+        $this->setMsg('Registro removido com sucesso.');
+        redirect($this->uri->segment(1));
     }
 }

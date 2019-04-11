@@ -15,12 +15,10 @@
                 <td><?php echo isset($user[$row->user_id]->name) ? $user[$row->user_id]->name : null; ?></td>
                 <td title="<?php echo strip_tags($row->details); ?>
 
-
-
 <?php echo strip_tags($row->last_comment); ?>"><?php echo $row->title; ?></td>
                 <td class="action">
                     <a href="<?php echo $row->html_url ?>" target="_blank">
-                        <i class="fa fa-eye" title="Permissão"></i>
+                        <i class="fa fa-eye" title="Visualizar no fórum"></i>
                     </a>
                     <a  href="./<?php echo $this->uri->segment(1); ?>/excluir/<?php echo $row->id; ?>">
                         <i class="fa fa-trash-alt" title="Excluir"></i>
