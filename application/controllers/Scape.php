@@ -18,7 +18,7 @@ class Scape extends MY_Controller
         $this->getUser();
 
         $this->data['list'] = $this->scape_model->get(array(
-            'date >=' => strtotime("-7 days")
+            'date >=' => date('Y-m-d', strtotime("-7 days"))
         ))->result();
 
         parent::renderer();
