@@ -62,7 +62,7 @@ class Scratch extends MY_Controller {
 			'use_db' => $this->input->get('use_db') == '0' ? false : true, 
 		));
 
-		$this->zenhack->set_datetime_limit(date('Y-m-d H:i:s', strtotime("-7 days")));
+		$this->zenhack->set_datetime_limit(date('Y-m-d H:i:s', strtotime("-" . $this->data['setting']['dayslimit']->value . " days")));
 		
 
 		//you may set the user that should write the last comments
